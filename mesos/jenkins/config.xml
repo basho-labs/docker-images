@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson>
+  <useSecurity>true</useSecurity>
+  <authorizationStrategy class="hudson.security.FullControlOnceLoggedInAuthorizationStrategy"/>
+  <securityRealm class="hudson.security.PAMSecurityRealm" plugin="pam-auth@1.2">
+    <serviceName>sshd</serviceName>
+  </securityRealm>
+  <disableRememberMe>false</disableRememberMe>
+  <jdks>
+    <jdk>
+      <name>Default</name>
+      <home>/usr/lib/jvm/java-8-openjdk-amd64</home>
+      <properties/>
+    </jdk>
+  </jdks>
+  <mode>EXCLUSIVE</mode>
+  <label>local</label>
+</hudson>

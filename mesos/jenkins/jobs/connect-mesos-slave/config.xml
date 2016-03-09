@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Connect a Mesos slave worker to Jenkins</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>secret</name>
+          <description>JNLP secret</description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>curl -sSL -XPOST -H &quot;Content-Type: application/json&quot; -d @- &quot;http://marathon.mesos:8080/v2/apps&quot; &lt;&lt;END
+{
+  &quot;id&quot;: &quot;/jenkins-mesos-slave&quot;,
+  &quot;cpus&quot;: 2,
+  &quot;mem&quot;: 2048,
+  &quot;instances&quot;: 1,
+  &quot;cmd&quot;: &quot;java -jar slave.jar -jnlpUrl http://${HOST}:${PORT0}/computer/mesos-slave/slave-agent.jnlp -secret ${secret}&quot;,
+  &quot;uris&quot;: [
+    &quot;http://${HOST}:${PORT0}/jnlpJars/slave.jar&quot;
+  ]
+}
+END</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

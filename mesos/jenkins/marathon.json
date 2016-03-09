@@ -1,0 +1,32 @@
+{
+  "id": "/jenkins",
+  "cpus": 2,
+  "mem": 4096,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "basho/jenkins-mesos",
+      "network": "BRIDGE",
+      "portMappings": [
+        { "containerPort": 8080, "hostPort": 0, "protocol": "tcp" },
+        { "containerPort": 0, "hostPort": 0, "protocol": "tcp" }
+      ],
+      "forcePullImage": true
+    }
+  },
+  "healthChecks": [
+    {
+      "path": "/",
+      "portIndex": 0,
+      "protocol": "HTTP",
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 300,
+      "timeoutSeconds": 300,
+      "maxConsecutiveFailures": 5,
+      "ignoreHttp1xx": false
+    }
+  ],
+  "user": "jenkins"
+}
+
