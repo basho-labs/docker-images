@@ -45,13 +45,9 @@ echo &quot;${publickey}&quot; &gt;~/.ssh/id_rsa.pub
 chmod 400 ~/.ssh/id_rsa</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>echo &gt; ~/.gitconfig &lt;&lt;END
-[user]
-        email = ${email}
-        name = ${name}
-[push]
-        default = simple
-END</command>
+      <command>git config --global user.email = &quot;${email}&quot;
+git config --global user.name = &quot;${name}&quot;
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>

@@ -8,7 +8,7 @@ ENV \
 # Install Build tools
 RUN \
   apt-get update && \
-  apt-get install -y apt-transport-https ca-certificates openssl tar git wget curl build-essential autoconf automake libtool python-dev python-boto libcurl4-nss-dev libsasl2-dev libsasl2-modules libapr1-dev libsvn-dev libncurses5-dev libssl-dev unixodbc-dev fop xsltproc && \
+  apt-get install -qy apt-transport-https ca-certificates openssl tar git wget curl build-essential autoconf automake libtool python-dev python-boto libcurl4-nss-dev libsasl2-dev libsasl2-modules libapr1-dev libsvn-dev libncurses5-dev libssl-dev unixodbc-dev libprotobuf-dev fop xsltproc && \
   apt-get dist-upgrade -y
 
 # Install Docker
@@ -25,9 +25,14 @@ RUN \
   apt-key adv --keyserver keyserver.ubuntu.com --recv 86F44E2A && \
   apt-key adv --keyserver keyserver.ubuntu.com --recv 642AC823 && \
   apt-get update && \
-  apt-get install -y openjdk-8-jdk sbt
+  apt-get install -y openjdk-8-jdk sbt=0.13.11
+# Download sbt jars
+RUN sbt about
+RUN wget https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar
 
 # Install Maven
 RUN curl -sSL http://www-us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz | tar -zxvf - -C /opt
 ENV MAVEN_HOME /opt/apache-maven-3.3.9
 ENV PATH $MAVEN_HOME/bin:$PATH
+
+RUN echo "StrictHostKeyChecking no" >>/etc/ssh/ssh_config

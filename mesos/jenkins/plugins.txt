@@ -29,6 +29,7 @@ junit
 ldap
 mailer
 mapdb-api
+mask-passwords
 matrix-auth
 matrix-combinations-parameter
 matrix-project
