@@ -44,6 +44,8 @@ TEST_CLEAN_TARGET    ?= test-clean
 TEST_FILES           := $(filter-out $(IGNORE_TESTS),$(wildcard $(TEST_DIR)/*.mk))
 # Overlays are snippets of Dockerfiles that can be parameterized and overridden
 
+.PHONY = all clean install push test $(OVERLAYS_DIR)/docker.mk
+
 $(OVERLAYS_DIR)/docker.mk:
 	[ ! -d "$(OVERLAYS_DIR)/docker.mk" ] && git clone https://github.com/jbrisbin/docker.mk.git $(OVERLAYS_DIR)/docker.mk
 
@@ -63,8 +65,6 @@ endef
 
 clean::
 	$(foreach shovr,$(SHARED_OVERLAYS), rm -f $(OVERLAYS_DIR)/$(shovr).Dockerfile;)
-
-.PHONY = all clean install push test
 
 all: install
 
