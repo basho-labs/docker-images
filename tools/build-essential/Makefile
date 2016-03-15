@@ -11,10 +11,10 @@ MAINTAINER = Jon Brisbin <jbrisbin@basho.com>
 TAG = basho/build-essential:$(OS_TAG)
 
 OVERLAYS_DIR = $(OS_FAMILY)
-OVERLAYS = build-essential
+OVERLAYS = build-essential git-ssh
 
 ifneq (0,$(JAVA))
-OVERLAYS += jdk-$(JAVA)
+OVERLAYS += jdk-$(JAVA) maven
 endif
 
 ifneq (0,$(MESOS))

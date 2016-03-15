@@ -24,17 +24,15 @@ ENTRYPOINT           ?=
 
 DOCKERFILE           ?= Dockerfile
 DOCKER_BUILD_OPTS    ?=
+DOCKER_RUN_OPTS      ?= --rm -it
 DOCKER_PUSH_OPTS     ?=
 DOCKER_TEST_OPTS     ?=
 
 OVERLAYS_DIR         ?= overlays
-SHARED_OVERLAYS_DIR  ?= ..
 OVERLAYS             ?=
-SHARED_OVERLAYS      ?=
 IGNORE_OVERLAYS      ?=
 
-OVERLAY_FILES        := $(patsubst %,$(OVERLAYS_DIR)/%.Dockerfile,$(filter-out $(IGNORE_OVERLAYS),$(OVERLAYS))) \
-	$(patsubst %,$(OVERLAYS_DIR)/%.Dockerfile,$(filter-out $(IGNORE_OVERLAYS),$(SHARED_OVERLAYS)))
+OVERLAY_FILES        := $(patsubst %,$(OVERLAYS_DIR)/%.Dockerfile,$(filter-out $(IGNORE_OVERLAYS),$(OVERLAYS)))
 
 IGNORE_TESTS         ?=
 TEST_DIR             ?= test
@@ -44,16 +42,11 @@ TEST_CLEAN_TARGET    ?= test-clean
 TEST_FILES           := $(filter-out $(IGNORE_TESTS),$(wildcard $(TEST_DIR)/*.mk))
 # Overlays are snippets of Dockerfiles that can be parameterized and overridden
 
-.PHONY = all clean install push test $(OVERLAYS_DIR)/docker.mk
-
 $(OVERLAYS_DIR)/docker.mk:
 	[ ! -d "$(OVERLAYS_DIR)/docker.mk" ] && git clone https://github.com/jbrisbin/docker.mk.git $(OVERLAYS_DIR)/docker.mk
 
 $(patsubst %,$(OVERLAYS_DIR)/docker.mk/%.Dockerfile,$(BUILTIN_OVERLAYS)): $(OVERLAYS_DIR)/docker.mk
 	$(verbose) echo "Downloaded built-in overlays"
-
-$(patsubst %,$(OVERLAYS_DIR)/%.Dockerfile,$(SHARED_OVERLAYS))::
-	rm -f $(@) && ln -s $(SHARED_OVERLAYS_DIR)/$(@) $(@)
 
 define source_overlay
 awk '/^#:mk[ ]/ {print "$$(eval " substr($$0, 6) ")"}' $(1);
@@ -63,8 +56,7 @@ define add_overlay
 awk '!/^#:mk[ ]/ {print $$0}' $(1) | sed "s#\$$CURDIR/#$(dir $(realpath $(1)))#g" | sed "s#$(CURDIR)/##g" >>$(DOCKERFILE);
 endef
 
-clean::
-	$(foreach shovr,$(SHARED_OVERLAYS), rm -f $(OVERLAYS_DIR)/$(shovr).Dockerfile;)
+.PHONY = all clean install push test
 
 all: install
 
@@ -74,6 +66,9 @@ clean::
 
 install:: $(DOCKERFILE)
 	docker build -t $(TAG) $(DOCKER_BUILD_OPTS) -f $(DOCKERFILE) $(CURDIR)
+
+run:: $(DOCKERFILE)
+	docker run $(DOCKER_RUN_OPTS) $(TAG)
 
 push::
 	docker push $(DOCKER_PUSH_OPTS) $(TAG)
