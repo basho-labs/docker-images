@@ -5,5 +5,4 @@ RUN \
   apt-key adv --keyserver keyserver.ubuntu.com --recv 86F44E2A && \
   apt-get update && \
   apt-get install -y openjdk-8-jdk
-ENV JAVA_HOME $(realpath /usr/lib/jvm/java-8-openjdk-amd64)
-ENV PATH $JAVA_HOME/bin:$PATH
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
