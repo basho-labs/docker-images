@@ -1,0 +1,4 @@
+ENV \
+  OS_FAMILY=centos \
+  OS_VERSION=7 \
+  OS_FLAVOR=x86_64
