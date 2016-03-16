@@ -1,14 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<project>
+<matrix-project plugin="matrix-project@1.6">
   <actions/>
-  <description>Connect a Mesos slave worker to Jenkins</description>
+  <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>secret</name>
-          <description>JNLP secret</description>
+          <description>JNLP Secret</description>
           <defaultValue></defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -22,15 +30,25 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
+  <axes>
+    <hudson.matrix.TextAxis>
+      <name>slave_name</name>
+      <values>
+        <string>mesos-slave-1</string>
+        <string>mesos-slave-2</string>
+        <string>mesos-slave-3</string>
+      </values>
+    </hudson.matrix.TextAxis>
+  </axes>
   <builders>
     <hudson.tasks.Shell>
       <command>curl -sSL -XPOST -H &quot;Content-Type: application/json&quot; -d @- &quot;http://marathon.mesos:8080/v2/apps&quot; &lt;&lt;END
 {
-  &quot;id&quot;: &quot;/jenkins-mesos-slave&quot;,
+  &quot;id&quot;: &quot;/jenkins-${slave_name}&quot;,
   &quot;cpus&quot;: 4,
   &quot;mem&quot;: 4096,
   &quot;instances&quot;: 1,
-  &quot;cmd&quot;: &quot;java -jar slave.jar -jnlpUrl http://${HOST}:${PORT0}/computer/mesos-slave/slave-agent.jnlp -secret ${secret}&quot;,
+  &quot;cmd&quot;: &quot;java -jar slave.jar -jnlpUrl http://${HOST}:${PORT0}/computer/${slave_name}/slave-agent.jnlp -secret ${secret}&quot;,
   &quot;uris&quot;: [
     &quot;http://${HOST}:${PORT0}/jnlpJars/slave.jar&quot;
   ]
@@ -40,4 +58,7 @@ END</command>
   </builders>
   <publishers/>
   <buildWrappers/>
-</project>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
+</matrix-project>

@@ -6,6 +6,7 @@ artifactory
 authentication-tokens
 branch-api
 cloudbees-folder
+config-file-provider
 credentials
 cvs
 docker-commons
@@ -24,16 +25,18 @@ gradle
 hipchat
 icon-shim
 javadoc
+jquery
 jquery-detached
 junit
 ldap
 mailer
+managed-scripts
 mapdb-api
-mask-passwords
 matrix-auth
 matrix-combinations-parameter
 matrix-project
 maven-plugin
+nodelabelparameter
 packer
 pam-auth
 plain-credentials
