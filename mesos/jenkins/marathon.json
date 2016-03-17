@@ -1,6 +1,6 @@
 {
-  "id": "/jenkins-mesos",
-  "cpus": 4,
+  "id": "/jenkins-mesos-build",
+  "cpus": 2,
   "mem": 8192,
   "instances": 1,
   "container": {
@@ -29,4 +29,3 @@
   ],
   "user": "jenkins"
 }
-

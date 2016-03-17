@@ -1,9 +1,9 @@
-FROM jenkinsci/jenkins
+FROM jenkinsci/jenkins:1.652
 MAINTAINER Jon Brisbin <jbrisbin@basho.com>
 
 USER root
 
-# Set user password 
+# Set user password
 RUN usermod -G shadow -a -p 4Dm3fH39Geavs jenkins
 RUN echo "StrictHostKeyChecking no" >>/etc/ssh/ssh_config
 
@@ -19,4 +19,3 @@ RUN tar -zxf /defaults.tgz -C $REF_DIR
 
 COPY plugins.txt $REF_DIR/
 RUN /usr/local/bin/plugins.sh $REF_DIR/plugins.txt
-
