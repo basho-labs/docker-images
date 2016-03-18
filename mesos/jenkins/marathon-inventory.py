@@ -17,7 +17,7 @@ grp.add_argument('--list', action='store_true', help='list all hosts')
 grp.add_argument('--host', help='get meta for specific host')
 opts = p.parse_args(sys.argv[1:])
 
-marathonUrl = os.environ.get('MARATHON_URL', 'http://localhost:8080')
+marathonUrl = os.environ.get('MARATHON_URL', 'http://marathon.mesos:8080')
 regex = re.compile(os.environ.get('APP_ID', '.*'))
 group = os.environ.get('GROUP', 'mesos')
 
