@@ -7,9 +7,9 @@ import re
 import urllib2
 
 try:
-		import json
+  import json
 except ImportError:
-		import simplejson as json
+  import simplejson as json
 
 p = argparse.ArgumentParser(description='inventory script that queries a Mesos cluster via Marathon')
 grp = p.add_mutually_exclusive_group(required=True)
