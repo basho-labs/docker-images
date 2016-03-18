@@ -3,12 +3,8 @@
   <installations class="org.jenkinsci.plugins.ansible.AnsibleInstallation-array">
     <org.jenkinsci.plugins.ansible.AnsibleInstallation>
       <name>Default</name>
-      <home></home>
-      <properties>
-        <hudson.tools.InstallSourceProperty>
-          <installers/>
-        </hudson.tools.InstallSourceProperty>
-      </properties>
+      <home>/usr/local/bin</home>
+      <properties/>
     </org.jenkinsci.plugins.ansible.AnsibleInstallation>
   </installations>
 </org.jenkinsci.plugins.ansible.AnsibleInstallation_-DescriptorImpl>

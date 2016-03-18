@@ -40,6 +40,7 @@ nodelabelparameter
 packer
 pam-auth
 plain-credentials
+python
 sbt
 scm-api
 scm-sync-configuration
