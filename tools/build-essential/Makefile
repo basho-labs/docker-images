@@ -11,7 +11,7 @@ MAINTAINER = Jon Brisbin <jbrisbin@basho.com>
 TAG = basho/build-essential:$(OS_TAG)
 
 OVERLAYS_DIR = $(OS_FAMILY)
-OVERLAYS = env-$(OS_VERSION) build-essential git-ssh
+OVERLAYS = env-$(OS_VERSION) build-essential git-ssh docker
 
 ifneq (0,$(JAVA))
 OVERLAYS += jdk-$(JAVA) maven
