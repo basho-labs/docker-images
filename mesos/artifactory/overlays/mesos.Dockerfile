@@ -8,3 +8,5 @@ RUN \
   apt-get install -y mesos=$MESOS_VERSION
 ENV \
   MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/libmesos.so \
+  MESOS_NATIVE_LIBRARY=/usr/lib/libmesos.so
+  
