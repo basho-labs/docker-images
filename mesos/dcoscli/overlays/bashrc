@@ -1,0 +1,21 @@
+# Set ENV vars to sensible defaults if not already set
+if [[ -z "$MARATHON" ]]; then
+  export MARATHON="http://leader.mesos:8080"
+fi
+if [[ -z "$MESOS" ]]; then
+  export MESOS="http://leader.mesos:5050"
+fi
+if [[ -z "$DCOS" ]]; then
+  # First, try to discover the URL, using the deployed shim
+  export DCOS="http://$(curl -s $MARATHON/v2/apps/dcos-proxy-shim/tasks | jq -r '.tasks[] | (.host + ":" + (.ports[0] | tostring))')"
+
+  if [ "http:" = "$DCOS" ]; then
+     export DCOS="http://leader.mesos"
+  fi
+fi
+
+dcos config set marathon.url $MARATHON
+dcos config set core.mesos_master_url $MESOS
+dcos config set core.dcos_url $DCOS
+
+export PS1="$MESOS > "
