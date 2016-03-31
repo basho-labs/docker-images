@@ -4,11 +4,11 @@ This Docker image contains an installation of the DCOS CLI tool for use with Apa
 
 ### Using
 
-To use the `basho/dcos` image, pull it and run it with an appropriate `--add-host` setting for `leader.mesos` or by setting the env vars `MARATHON`, `MESOS`, and `DCOS` to the URLs to those respective services.
+To use the `basho/dcoscli` image, pull it and run it with an appropriate `--add-host` setting for `leader.mesos` or by setting the env vars `MARATHON`, `MESOS`, and `DCOS` to the URLs to those respective services.
 
 e.g. to run the DCOS CLI connected to a `leader.mesos` of 192.168.0.10:
 
-    $ docker run --rm -it --add-host leader.mesos:192.168.0.10 basho/dcos
+    $ docker run --rm -it --add-host leader.mesos:192.168.0.10 basho/dcoscli
     [marathon.url]: set to 'http://leader.mesos:8080'
     [core.mesos_master_url]: set to 'http://leader.mesos:5050'
     [core.dcos_url]: set to 'http://leader.mesos'
