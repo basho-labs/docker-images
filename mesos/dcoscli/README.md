@@ -1,4 +1,4 @@
-# basho/dcos
+# basho/dcoscli
 
 This Docker image contains an installation of the DCOS CLI tool for use with Apache Mesos. It assumes you either are running the DCOS server on `leader.mesos` or the OSS `dcos-proxy-shim`, which is a small nginx image that proxies the URLs from Marathon and Mesos to make the CLI happy.
 
