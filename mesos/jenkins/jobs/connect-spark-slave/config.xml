@@ -26,7 +26,7 @@
     <hudson.tasks.Shell>
       <command>curl -sSL -XPOST -H &quot;Content-Type: application/json&quot; -d @- &quot;http://marathon.mesos:8080/v2/apps&quot; &lt;&lt;END
 {
-  &quot;id&quot;: &quot;/jenkins-spark-slave&quot;,
+  &quot;id&quot;: &quot;/jenkins/build/spark-slave&quot;,
   &quot;cpus&quot;: 4,
   &quot;mem&quot;: 4096,
   &quot;instances&quot;: 1,

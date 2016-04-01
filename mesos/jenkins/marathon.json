@@ -1,5 +1,5 @@
 {
-  "id": "/jenkins/build",
+  "id": "/jenkins/build/master",
   "cpus": 2,
   "mem": 8192,
   "instances": 1,
@@ -11,8 +11,7 @@
       "portMappings": [
         { "containerPort": 8080, "hostPort": 0, "protocol": "tcp" },
         { "containerPort": 0, "hostPort": 0, "protocol": "tcp" }
-      ],
-      "forcePullImage": true
+      ]
     }
   },
   "healthChecks": [

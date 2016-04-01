@@ -7,9 +7,9 @@ if [[ -z "$MESOS" ]]; then
 fi
 if [[ -z "$DCOS" ]]; then
   # First, try to discover the URL, using the deployed shim
-  export DCOS="http://$(curl -s $MARATHON/v2/apps/dcos-proxy-shim/tasks | jq -r '.tasks[] | (.host + ":" + (.ports[0] | tostring))')"
+  export DCOS="http://$(curl -fs $MARATHON/v2/apps/dcos-pproxy-shim/tasks || echo '' | jq -r '.tasks[] | (.host + ":" + (.ports[0] | tostring))')"
 
-  if [ "http:" = "$DCOS" ]; then
+  if [ "http://" == "$DCOS" ]; then
      export DCOS="http://leader.mesos"
   fi
 fi

@@ -16,12 +16,13 @@ RUN chmod +x /etc/ansible/hosts
 ENV \
   MARATHON_URL=http://marathon.mesos:8080 \
   APP_ID='^/jenkins-[\w]+-slave-[1-9]+' \
-  GROUP=jenkins-slaves
+  GROUP=mesos
 
 # Install basic utilities
 RUN \
   apt-get update && \
   apt-get install -y apt-transport-https ca-certificates git curl wget vim python-pip python-dev && \
+  pip install --upgrade pip && \
   pip install ansible
 
 # Install Apache Mesos
@@ -33,7 +34,7 @@ RUN \
   apt-get install -y mesos=$MESOS_VERSION
 ENV \
   MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/libmesos.so \
-  MESOS_NATIVE_LIBRARY=/usr/lib/libmesos.so 
+  MESOS_NATIVE_LIBRARY=/usr/lib/libmesos.so
 
 RUN rm -Rf /var/lib/apt/*
 

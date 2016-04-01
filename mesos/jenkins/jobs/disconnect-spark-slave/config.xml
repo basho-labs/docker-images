@@ -13,7 +13,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>curl -sSL -XDELETE http://marathon.mesos:8080/v2/apps/jenkins-spark-slave</command>
+      <command>curl -sSL -XDELETE http://marathon.mesos:8080/v2/apps/jenkins/build/spark-slave</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>

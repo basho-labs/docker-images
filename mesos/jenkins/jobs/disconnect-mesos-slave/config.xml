@@ -24,7 +24,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>curl -sSL -XDELETE &quot;http://marathon.mesos:8080/v2/apps/${slave_name}&quot;</command>
+      <command>curl -sSL -XDELETE &quot;http://marathon.mesos:8080/v2/apps/jenkins/build/${slave_name}&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
