@@ -14,8 +14,10 @@ if [[ -z "$DCOS" ]]; then
   fi
 fi
 
-sed -i "s#{{marathon_url}}#$MARATHON#g" $HOME/.dcos/dcos.toml
-sed -i "s#{{mesos_master_url}}#$MESOS#g" $HOME/.dcos/dcos.toml
-sed -i "s#{{dcos_url}}#$DCOS#g" $HOME/.dcos/dcos.toml
+DCOS_TOML=$(realpath $HOME)/.dcos/dcos.toml
+
+sed -i "s#{{marathon_url}}#$MARATHON#g" $DCOS_TOML
+sed -i "s#{{mesos_master_url}}#$MESOS#g" $DCOS_TOML
+sed -i "s#{{dcos_url}}#$DCOS#g" $DCOS_TOML
 
 export PS1="dcos> "
