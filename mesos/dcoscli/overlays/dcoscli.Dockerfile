@@ -1,6 +1,6 @@
 
 # Install DCOS
-RUN pip install 'dcoscli==0.3.5'
+RUN pip install 'dcoscli==0.3.2'
 
 # Set up DCOS user
 ENV HOME /var/lib/dcos
@@ -19,8 +19,8 @@ RUN chmod 0755 /dcos.sh
 USER dcos
 
 # Install base utilties to get cli commands
+RUN dcos package update
 RUN \
-  dcos package update && \
   dcos package install --cli --yes kafka && \
   dcos package install --cli --yes riak
 
