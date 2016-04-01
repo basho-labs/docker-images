@@ -1,5 +1,5 @@
 {
-  "id": "/jenkins-mesos-build",
+  "id": "/jenkins/build",
   "cpus": 2,
   "mem": 8192,
   "instances": 1,

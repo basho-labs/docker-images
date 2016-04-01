@@ -18,7 +18,7 @@ grp.add_argument('--host', help='get meta for specific host')
 opts = p.parse_args(sys.argv[1:])
 
 marathonUrl = os.environ.get('MARATHON_URL', 'http://marathon.mesos:8080')
-regex = re.compile(os.environ.get('APP_ID', '.*'))
+regex = re.compile(os.environ.get('APP_ID', '^/jenkins-[\w]+-slave-[1-9]+'))
 group = os.environ.get('GROUP', 'mesos')
 
 data = {"_meta": {"hostvars": {}}}
@@ -39,17 +39,16 @@ def get_tasks():
   for h in data[group]:
     for ai in appInfo["apps"]:
       if ai["id"] == data["_meta"]["hostvars"][h]["appId"]:
-        for (k, v) in ai["env"]:
-          data["_meta"]["hostvars"][h][k] = v
+        for k in ai["env"]:
+          data["_meta"]["hostvars"][h][k] = ai["env"][k]
   return data
 
 if opts.list:
-	print json.dumps(get_tasks())
+  print json.dumps(get_tasks())
 elif opts.host:
   data = get_tasks()
   print json.dumps(data["_meta"]["hostvars"][opts.host])
 else:
-	p.print_help()
+  p.print_help()
 
 sys.exit(0)
-
