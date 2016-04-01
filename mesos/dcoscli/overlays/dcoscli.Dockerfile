@@ -9,9 +9,10 @@ COPY $CURDIR/bashrc $HOME/.bashrc
 RUN mkdir -p /var/cache/dcos /var/tmp
 
 # Configure DCOS
-RUN mkdir -p $HOME/.dcos
+RUN mkdir -p $HOME/.dcos /etc/riak-mesos
 COPY $CURDIR/dcos.toml $HOME/.dcos
-RUN chown -R dcos:dcos $HOME /var/cache/dcos
+RUN chown -R dcos:dcos $HOME /var/cache/dcos /etc/riak-mesos
+VOLUME /etc/riak-mesos
 
 COPY $CURDIR/dcos.sh /
 RUN chmod 0755 /dcos.sh
