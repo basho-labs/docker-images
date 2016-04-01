@@ -14,8 +14,8 @@ if [[ -z "$DCOS" ]]; then
   fi
 fi
 
-dcos config set marathon.url $MARATHON
-dcos config set core.mesos_master_url $MESOS
-dcos config set core.dcos_url $DCOS
+sed -i "s#{{marathon_url}}#$MARATHON#g" $HOME/.dcos/dcos.toml
+sed -i "s#{{mesos_master_url}}#$MESOS#g" $HOME/.dcos/dcos.toml
+sed -i "s#{{dcos_url}}#$DCOS#g" $HOME/.dcos/dcos.toml
 
-export PS1="$MESOS > "
+export PS1="dcos> "

@@ -12,6 +12,9 @@ RUN mkdir -p $HOME/.dcos
 COPY $CURDIR/dcos.toml $HOME/.dcos/
 RUN chown -R dcos:dcos $HOME
 
+COPY $CURDIR/dcos.sh /
+RUN chmod 0755 /dcos.sh
+
 USER dcos
 
 # Install base utilties to get cli commands
@@ -22,4 +25,4 @@ RUN \
 
 # Set up ENTRYPOINT
 # ENTRYPOINT ["dcos"]
-ENTRYPOINT ["bash", "-i"]
+ENTRYPOINT ["/dcos.sh"]

@@ -9,19 +9,24 @@ To use the `basho/dcoscli` image, pull it and run it with an appropriate `--add-
 e.g. to run the DCOS CLI connected to a `leader.mesos` of 192.168.0.10:
 
     $ docker run --rm -it --add-host leader.mesos:192.168.0.10 basho/dcoscli
-    [marathon.url]: set to 'http://leader.mesos:8080'
-    [core.mesos_master_url]: set to 'http://leader.mesos:5050'
-    [core.dcos_url]: set to 'http://leader.mesos'
-    http://leader.mesos:5050 >
+    dcos>
 
 You're now at a command prompt where you can issue dcos commands against the Mesos cluster:
 
-    http://leader.mesos:5050 > dcos marathon task list
+    dcos> dcos marathon task list
     APP               HEALTHY          STARTED                 HOST       ID
     /dcos-proxy-shim    True   2016-03-30T19:56:36.258Z  192.168.0.11 dcos-proxy-shim.768a574d-f6b1-11e5-8165-065135d5f202
     /mesos-dns          True   2016-03-30T19:56:10.395Z  192.168.0.12 mesos-dns.72f4383c-f6b1-11e5-8165-065135d5f202
-    http://leader.mesos:5050 >
+    dcos>
 
+This image can also be run directly. Just omit the `dcos` part of the command when doing a `docker run`:
+
+    $ docker run --rm -it --add-host leader.mesos:192.168.0.10 basho/dcoscli marathon task list
+    APP               HEALTHY          STARTED                 HOST       ID
+    /dcos-proxy-shim    True   2016-03-30T19:56:36.258Z  192.168.0.11 dcos-proxy-shim.768a574d-f6b1-11e5-8165-065135d5f202
+    /mesos-dns          True   2016-03-30T19:56:10.395Z  192.168.0.12 mesos-dns.72f4383c-f6b1-11e5-8165-065135d5f202
+    $
+    
 ### Building
 
 This image is based on Alpine Linux and uses the [docker.mk](https://github.com/jbrisbin/docker.mk) utility to build.
