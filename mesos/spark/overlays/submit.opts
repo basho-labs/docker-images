@@ -1,1 +1,0 @@
---driver-memory 512M --executor-memory 1G --deploy-mode client --conf spark.mesos.executor.docker.image=basho/spark 

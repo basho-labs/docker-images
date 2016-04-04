@@ -7,14 +7,10 @@ RUN \
   mkdir -p $SPARK_HOME && \
   curl -sSL http://www-us.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-${HADOOP_VERSION}.tgz | tar zxf - -C $SPARK_HOME --strip-components=1
 
-RUN mkdir -p /etc/spark
-COPY $CURDIR/submit.opts /etc/spark/
-COPY $CURDIR/spark-submit.sh /
-RUN chmod a+x /spark-submit.sh
-
 ENV \
   SPARK_HOME=$SPARK_HOME \
   PATH=$SPARK_HOME/bin:$PATH \
-  MASTER=local[*]
+  MASTER=local[*] \
+  SPARK_SUBMIT_OPTIONS="--driver-memory 512M --executor-memory 1G --deploy-mode client --conf spark.mesos.executor.docker.image=basho/spark"
 
-ENTRYPOINT ["/spark-submit.sh"]
+CMD ["bash", "-i"]
