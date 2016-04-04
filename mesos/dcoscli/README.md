@@ -21,12 +21,12 @@ You're now at a command prompt where you can issue dcos commands against the Mes
 
 This image can also be run directly. Just omit the `dcos` part of the command when doing a `docker run`:
 
-    $ docker run --rm -it --add-host leader.mesos:192.168.0.10 basho/dcoscli marathon task list
+    $ docker run --rm --add-host leader.mesos:192.168.0.10 basho/dcoscli marathon task list
     APP               HEALTHY          STARTED                 HOST       ID
     /dcos-proxy-shim    True   2016-03-30T19:56:36.258Z  192.168.0.11 dcos-proxy-shim.768a574d-f6b1-11e5-8165-065135d5f202
     /mesos-dns          True   2016-03-30T19:56:10.395Z  192.168.0.12 mesos-dns.72f4383c-f6b1-11e5-8165-065135d5f202
     $
-    
+
 ### Building
 
 This image is based on Alpine Linux and uses the [docker.mk](https://github.com/jbrisbin/docker.mk) utility to build.
