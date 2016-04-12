@@ -11,5 +11,6 @@ RUN apt-get install -qy \
 RUN pip install riak
 
 RUN apt-get purge -y \
-  $(apt-cache pkgnames|egrep "(.*)-dev$") \
+  $(awk '/installed/ {print $5}' /var/log/dpkg.log | cut -d: -f1 | sort -u | egrep "\-dev$") \
   build-essential
+RUN rm -Rf /var/lib/apt/* /var/cache/apt/*
