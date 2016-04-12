@@ -32,7 +32,8 @@ RUN \
   cd $SITE_PKGS && \
   curl -sSLO https://pypi.python.org/packages/2.7/r/riak/riak-2.4.2-py2.7.egg && \
   curl -sSLO https://pypi.python.org/packages/2.7/p/protobuf/protobuf-2.6.1-py2.7.egg && \
-  unzip *.egg
+  unzip riak-2.4.2-py2.7.egg && \
+  unzip protobuf-2.6.1-py2.7.egg
 
 WORKDIR /var/lib/riak/data
 CMD ["../riak.sh"]
