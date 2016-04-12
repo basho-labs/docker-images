@@ -1,0 +1,7 @@
+ENV \
+  DEBIAN_FRONTEND=noninteractive \
+  DEBCONF_NONINTERACTIVE_SEEN=true
+ENV \
+  OS_FAMILY=ubuntu \
+  OS_VERSION=15.10 \
+  OS_FLAVOR=wily
