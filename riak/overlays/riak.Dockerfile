@@ -17,6 +17,11 @@ RUN \
   mkdir -p /etc/riak/init.sql.d && \
   mkdir -p /var/log/riak && \
   mkdir -p /var/lib/riak/data
+
+VOLUME /etc/riak/init.sql.d
+VOLUME /var/log/riak
+VOLUME /var/lib/riak/data
+
 COPY $CURDIR/riak.conf /etc/riak/riak.conf
 COPY $CURDIR/riak.sh /var/lib/riak/riak.sh
 
