@@ -6,7 +6,7 @@ RUN \
   mkdir -p $ERLANG_HOME && \
   curl -sSL $ERLANG_URL | tar zxf - -C $ERLANG_HOME
 
-ENV update-alternatives \
+RUN update-alternatives \
   --install /usr/bin/erl erl $ERLANG_HOME/bin/erl 1 \
   --slave /usr/bin/erlc erlc $ERLANG_HOME/bin/erlc \
   --slave /usr/bin/escript escript $ERLANG_HOME/bin/escript \
