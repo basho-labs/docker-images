@@ -12,6 +12,7 @@ ENV PATH=$RIAK_HOME/bin:$PATH
 RUN \
   sed -i -r 's#RUNNER_ETC_DIR=\$RUNNER_BASE_DIR(.*)#RUNNER_ETC_DIR=/etc/riak#g' $RIAK_HOME/lib/env.sh && \
   sed -i -r 's#RUNNER_LOG_DIR=\$RUNNER_BASE_DIR(.*)#RUNNER_LOG_DIR=/var/log/riak#g' $RIAK_HOME/lib/env.sh
+
 RUN \
   mkdir -p /etc/riak/init.sql.d && \
   mkdir -p /var/log/riak && \
