@@ -34,5 +34,8 @@ RUN \
   unzip -o riak-2.4.2-py2.7.egg && \
   unzip -o protobuf-2.6.1-py2.7.egg
 
+EXPOSE 8087
+EXPOSE 8098
+
 WORKDIR /var/lib/riak/data
 CMD ["../riak.sh"]
