@@ -9,6 +9,8 @@ MASTER=$((ping -c1 ${CLUSTER_NAME}1 2>/dev/null || echo 'PING local 127.0.0.1') 
 
 sed -i -r "s#nodename = (.*)#nodename = riak@$HOST#g" /etc/riak/riak.conf
 sed -i -r "s#distributed_cookie = (.*)#distributed_cookie = $CLUSTER_NAME#g" /etc/riak/riak.conf
+sed -i -r "s#listener\.http\.internal = (.*)#listener.http.internal = $HOST:8098#g" /etc/riak/riak.conf
+sed -i -r "s#listener\.protobuf\.internal = (.*)#listener.protobuf.internal = $HOST:8087#g" /etc/riak/riak.conf
 
 $RIAK start
 
