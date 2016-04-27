@@ -13,7 +13,6 @@ sed -i -r "s#listener\.protobuf\.internal = (.*)#listener.protobuf.internal = $H
 sed -i -r "s#listener\.http\.internal = (.*)#listener.http.internal = $HOST:8098#g" /etc/riak/riak.conf
 
 $RIAK start
-$RIAK_ADMIN wait-for-service riak_kv riak@$HOST
 
 if [ "$HOST" != "$MASTER" ]; then
   echo "Connecting to cluster @ $MASTER"

@@ -25,6 +25,7 @@ VOLUME /var/lib/riak/data
 COPY $CURDIR/riak.conf /etc/riak/riak.conf
 COPY $CURDIR/solr-log4j.properties /etc/riak/solr-log4j.properties
 COPY $CURDIR/riak.sh /var/lib/riak/riak.sh
+COPY $CURDIR/cluster-status.sh /var/lib/riak/cluster-status.sh
 
 # Install the Python client
 RUN \
