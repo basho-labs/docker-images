@@ -14,7 +14,7 @@ OVERLAYS_DIR = $(OS_FAMILY)
 OVERLAYS = env-$(OS_VERSION) build-essential git-ssh docker
 
 ifneq (0,$(JAVA))
-OVERLAYS += jdk-$(JAVA) maven
+OVERLAYS += jdk-$(JAVA) maven sbt
 endif
 
 ifneq (0,$(MESOS))
