@@ -1,12 +1,7 @@
-RIAK_URL ?=
-ERLANG_URL ?=
-
-FROM = ubuntu:15.10
+FROM = ubuntu:trusty
 MAINTAINER = Jon Brisbin <jbrisbin@basho.com>
-TAG = basho/riak-ts
+TAG = basho/riak-ts:1.3.0
 
-OVERLAYS = env essential erlang riak #java-8
-
-DOCKER_BUILD_OPTS += --build-arg ERLANG_URL=$(ERLANG_URL) --build-arg RIAK_URL=$(RIAK_URL)
+OVERLAYS = env essential riak #java-8
 
 -include ../docker.mk
