@@ -1,6 +1,6 @@
 
 # Install Apache Mesos
-ARG MESOS_VERSION=0.27.1-2.0.226.ubuntu1404
+ARG MESOS_VERSION
 RUN \
   echo "deb http://repos.mesosphere.io/ubuntu/ trusty main" > /etc/apt/sources.list.d/mesos.list && \
   apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E56151BF && \
