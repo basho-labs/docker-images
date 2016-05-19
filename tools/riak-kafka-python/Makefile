@@ -1,7 +1,7 @@
-FROM = ubuntu
+FROM = ubuntu:15.10
 MAINTAINER = Jon Brisbin <jbrisbin@basho.com>
 TAG = basho/riak-kafka-python
 
-OVERLAYS = riak kafka
+OVERLAYS = env riak kafka
 
 -include ../../docker.mk
