@@ -32,7 +32,7 @@ RUN apt-key adv --keyserver p80.pool.sks-keyservers.net --recv-keys 58118E89F3A9
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
 
 # Install apt repos
-RUN echo "deb https://apt.dockerproject.org/repo jessie main" >/etc/apt/sources.list.d/docker.list
+RUN echo "deb https://apt.dockerproject.org/repo debian-jessie main" >/etc/apt/sources.list.d/docker.list
 RUN echo "deb http://repos.mesosphere.io/debian/ jessie main" >/etc/apt/sources.list.d/mesos.list
 
 RUN apt-get update
