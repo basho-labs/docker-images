@@ -15,26 +15,33 @@ COPY marathon-inventory.py /etc/ansible/hosts
 RUN chmod +x /etc/ansible/hosts
 ENV \
   MARATHON_URL=http://marathon.mesos:8080 \
-  APP_ID='^/jenkins-[\w]+-slave-[1-9]+' \
+  APP_ID='.*' \
   GROUP=mesos
 
+# Install Keys
+RUN apt-key adv --keyserver p80.pool.sks-keyservers.net --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
+
+# Install apt repos
+RUN echo "deb https://apt.dockerproject.org/repo jessie main" >/etc/apt/sources.list.d/docker.list
+RUN echo "deb http://repos.mesosphere.io/debian/ jessie main" >/etc/apt/sources.list.d/mesos.list
+
 # Install basic utilities
-RUN \
-  apt-get update && \
-  apt-get install -y apt-transport-https ca-certificates git curl wget vim python-pip python-dev && \
-  pip install --upgrade pip && \
-  pip install ansible
+RUN apt-get update
+RUN apt-get install -y apt-transport-https ca-certificates git curl wget vim python-pip python-dev
+RUN apt-get dist-upgrade -y
+RUN pip install --upgrade pip
+RUN pip install ansible
 
 # Install Apache Mesos
-ARG MESOS_VERSION=0.26.0-0.2.145.debian81
-RUN \
-  echo "deb http://repos.mesosphere.io/debian/ jessie main" > /etc/apt/sources.list.d/mesos.list && \
-  apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF && \
-  apt-get update && \
-  apt-get install -y mesos=$MESOS_VERSION
+ARG MESOS_VERSION=0.28.0-2.0.16.debian81
+RUN apt-get install -y mesos=$MESOS_VERSION
 ENV \
   MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/libmesos.so \
   MESOS_NATIVE_LIBRARY=/usr/lib/libmesos.so
+
+# Install Docker
+RUN apt-get install -y docker-engine
 
 RUN rm -Rf /var/lib/apt/*
 

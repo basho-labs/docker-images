@@ -18,7 +18,7 @@ grp.add_argument('--host', help='get meta for specific host')
 opts = p.parse_args(sys.argv[1:])
 
 marathonUrl = os.environ.get('MARATHON_URL', 'http://marathon.mesos:8080')
-regex = re.compile(os.environ.get('APP_ID', '^/jenkins-[\w]+-slave-[1-9]+'))
+regex = re.compile(os.environ.get('APP_ID', '.*'))
 group = os.environ.get('GROUP', 'mesos')
 
 data = {"_meta": {"hostvars": {}}}
