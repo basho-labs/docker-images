@@ -20,7 +20,7 @@ ENV \
 
   # Install basic utilities
 RUN apt-get update
-RUN apt-get install -y apt-transport-https ca-certificates git curl wget vim python-pip python-dev
+RUN apt-get install -y apt-transport-https ca-certificates git curl wget vim python-pip python-dev libffi-dev
 RUN pip install --upgrade pip
 RUN pip install ansible
 RUN apt-get dist-upgrade -y
