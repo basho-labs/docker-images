@@ -34,7 +34,7 @@ RUN pip install --upgrade pip
 RUN pip install ansible
 
 # Install Apache Mesos
-ARG MESOS_VERSION=0.28.0-2.0.16.debian81
+ARG MESOS_VERSION=0.26.1-2.0.19.debian81
 RUN apt-get install -y mesos=$MESOS_VERSION
 ENV \
   MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/libmesos.so \
