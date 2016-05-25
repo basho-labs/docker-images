@@ -21,7 +21,7 @@ ENV \
   # Install basic utilities
 RUN apt-get update
 RUN apt-get install -y openssl apt-transport-https ca-certificates git curl wget vim python-pip
-RUN apt-get install -y libssl-dev python-dev libffi-dev
+RUN apt-get install -y libssl-dev python-dev python-setuptools libffi-dev
 RUN pip install --upgrade pip
 RUN pip install --upgrade pyopenssl
 RUN pip install ansible
