@@ -39,7 +39,6 @@ mask-passwords
 matrix-auth
 matrix-project
 maven-plugin
-mesos
 metrics
 momentjs
 pam-auth
