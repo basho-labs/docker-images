@@ -38,7 +38,7 @@ RUN echo "deb http://repos.mesosphere.io/debian/ jessie main" >/etc/apt/sources.
 RUN apt-get update
 
 # Install Apache Mesos
-ARG MESOS_VERSION=0.26.0-0.2.125.debian81
+ARG MESOS_VERSION=0.26.0-0.2.129.debian81
 RUN apt-get install -y mesos=$MESOS_VERSION
 ENV \
   MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/libmesos.so \
