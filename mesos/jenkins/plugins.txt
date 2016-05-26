@@ -16,6 +16,7 @@ git
 github-api
 github-oauth
 github
+hipchat
 icon-shim
 jackson2-api
 javadoc
@@ -23,9 +24,11 @@ junit
 ldap
 mailer
 mapdb-api
+mask-passwords
 matrix-auth
 matrix-project
 maven-plugin
+mesos
 metrics
 pam-auth
 plain-credentials
@@ -33,7 +36,9 @@ scm-api
 script-security
 ssh-credentials
 ssh-slaves
+structs
 subversion
 token-macro
 translation
 windows-slaves
+workflow-step-api
