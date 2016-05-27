@@ -24,6 +24,7 @@ RUN apt-get dist-upgrade -y
 RUN apt-get install -y openssl apt-transport-https ca-certificates git curl wget vim python-setuptools python-pip
 RUN apt-get install -y libssl-dev python-dev libffi-dev
 RUN pip install --upgrade pip
+RUN pip install --upgrade cffi
 RUN pip install --upgrade pyopenssl
 RUN pip install ansible
 
@@ -48,8 +49,6 @@ RUN apt-get install -y docker-engine
 
 # Clean up
 RUN rm -Rf /var/lib/apt/*
-
-COPY jenkins.sh /usr/local/bin/jenkins.sh
 
 ENV REF_DIR /usr/share/jenkins/ref
 
