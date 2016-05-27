@@ -6,7 +6,7 @@ authentication-tokens
 branch-api
 build-history-metrics-plugin
 cloudbees-folder
-credentials
+credentials#2.0.6
 cvs
 docker-build-publish
 docker-commons
