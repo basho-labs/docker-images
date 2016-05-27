@@ -20,20 +20,20 @@ ENV \
 
   # Install basic utilities
 RUN apt-get update
+RUN apt-get dist-upgrade -y
 RUN apt-get install -y openssl apt-transport-https ca-certificates git curl wget vim python-setuptools python-pip
 RUN apt-get install -y libssl-dev python-dev libffi-dev
 RUN pip install --upgrade pip
 RUN pip install --upgrade pyopenssl
 RUN pip install ansible
-RUN apt-get dist-upgrade -y
-
-# Install Keys
-RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv E56151BF
-RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv 2C52609D
 
 # Install apt repos
 RUN echo "deb https://apt.dockerproject.org/repo debian-jessie main" >/etc/apt/sources.list.d/docker.list
 RUN echo "deb http://repos.mesosphere.io/debian/ jessie main" > /etc/apt/sources.list.d/mesos.list
+
+# Install Keys
+RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv E56151BF
+RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv 2C52609D
 
 RUN apt-get update
 
