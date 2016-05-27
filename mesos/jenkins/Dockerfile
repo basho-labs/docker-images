@@ -41,7 +41,8 @@ RUN apt-get update
 RUN apt-get install -y mesos
 ENV \
   MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/libmesos.so \
-  MESOS_NATIVE_LIBRARY=/usr/lib/libmesos.so
+  MESOS_NATIVE_LIBRARY=/usr/lib/libmesos.so \
+  LIBPROCESS_IP=$HOST
 
 # Install Docker
 RUN apt-get install -y docker-engine
