@@ -35,13 +35,6 @@ RUN echo "deb https://apt.dockerproject.org/repo debian-jessie main" >/etc/apt/s
 
 RUN apt-get update
 
-# Install Apache Mesos
-ADD mesos-0.26.0-debian-8.tgz /usr/lib/mesos
-ENV \
-  PATH=/usr/lib/mesos/bin:$PATH \
-  MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/mesos/lib/libmesos.so \
-  MESOS_NATIVE_LIBRARY=/usr/lib/mesos/lib/libmesos.so
-
 # Install Docker
 RUN apt-get install -y docker-engine
 
