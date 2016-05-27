@@ -10,10 +10,19 @@
       "network": "BRIDGE",
       "portMappings": [
         { "containerPort": 8080, "hostPort": 0, "protocol": "tcp" },
-        { "containerPort": 0, "hostPort": 0, "protocol": "tcp" }
-      ]
+        { "containerPort": 50000, "hostPort": 0, "protocol": "tcp" }
+      ],
+      "privileged": true,
+      "forcePullImage": true
     }
   },
+  "volumes": [
+    {
+      "containerPath": "/var/run/docker.sock",
+      "hostPath": "/var/run/docker.sock",
+      "mode": "RW"
+    }
+  ],
   "healthChecks": [
     {
       "path": "/",
