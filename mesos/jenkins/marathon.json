@@ -1,7 +1,7 @@
 {
   "id": "/jenkins/master",
-  "cpus": 2,
-  "mem": 8192,
+  "cpus": 1,
+  "mem": 4096,
   "instances": 1,
   "container": {
     "type": "DOCKER",
