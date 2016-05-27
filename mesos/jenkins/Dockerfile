@@ -41,13 +41,15 @@ RUN apt-get update
 RUN apt-get install -y mesos
 ENV \
   MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/libmesos.so \
-  MESOS_NATIVE_LIBRARY=/usr/lib/libmesos.so \
-  LIBPROCESS_IP=$HOST
+  MESOS_NATIVE_LIBRARY=/usr/lib/libmesos.so
 
 # Install Docker
 RUN apt-get install -y docker-engine
 
+# Clean up
 RUN rm -Rf /var/lib/apt/*
+
+COPY jenkins.sh /usr/local/bin/jenkins.sh
 
 ENV REF_DIR /usr/share/jenkins/ref
 
