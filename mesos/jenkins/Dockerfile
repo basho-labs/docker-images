@@ -28,12 +28,20 @@ RUN pip install ansible
 RUN apt-get dist-upgrade -y
 
 # Install Keys
-RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv E56151BF
+RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv 2C52609D
 
 # Install apt repos
 RUN echo "deb https://apt.dockerproject.org/repo debian-jessie main" >/etc/apt/sources.list.d/docker.list
+RUN echo "deb http://repos.mesosphere.io/debian/ jessie main" > /etc/apt/sources.list.d/mesos.list
 
 RUN apt-get update
+
+# Install Apache Mesos
+RUN apt-get install -y mesos
+ENV \
+  MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/libmesos.so \
+  MESOS_NATIVE_LIBRARY=/usr/lib/libmesos.so
 
 # Install Docker
 RUN apt-get install -y docker-engine

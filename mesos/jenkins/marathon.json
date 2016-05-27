@@ -1,5 +1,5 @@
 {
-  "id": "/jenkins/build/master",
+  "id": "/jenkins/master",
   "cpus": 2,
   "mem": 8192,
   "instances": 1,
@@ -10,7 +10,7 @@
       "network": "BRIDGE",
       "portMappings": [
         { "containerPort": 8080, "hostPort": 0, "protocol": "tcp" },
-        { "containerPort": 50000, "hostPort": 0, "protocol": "tcp" }
+        { "containerPort": 0, "hostPort": 0, "protocol": "tcp" }
       ],
       "privileged": true,
       "forcePullImage": true
