@@ -1,4 +1,4 @@
-FROM jenkinsci/jenkins:1.626
+FROM jenkinsci/jenkins:2.7
 MAINTAINER Jon Brisbin <jbrisbin@basho.com>
 
 USER root
