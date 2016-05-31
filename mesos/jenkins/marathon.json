@@ -1,6 +1,6 @@
 {
   "id": "/jenkins/master",
-  "cpus": 1,
+  "cpus": 2,
   "mem": 4096,
   "instances": 1,
   "container": {
@@ -21,6 +21,16 @@
       "containerPath": "/var/run/docker.sock",
       "hostPath": "/var/run/docker.sock",
       "mode": "RW"
+    },
+    {
+      "containerPath": "/home/jenkins/.ssh",
+      "hostPath": "/var/jenkins_home/.ssh",
+      "mode": "RW"
+    },
+    {
+      "containerPath": "/home/jenkins/.gitconfig",
+      "hostPath": "/var/jenkins_home/.gitconfig",
+      "mode": "RO"
     }
   ],
   "healthChecks": [
