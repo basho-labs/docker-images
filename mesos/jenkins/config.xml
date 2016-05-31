@@ -15,37 +15,4 @@
   </jdks>
   <mode>EXCLUSIVE</mode>
   <label>local</label>
-  <clouds>
-   <org.jenkinsci.plugins.mesos.MesosCloud plugin="mesos@0.12.0">
-     <name>MesosCloud</name>
-     <nativeLibraryPath>/usr/lib/libmesos.so</nativeLibraryPath>
-     <master>master.mesos:5050</master>
-     <description></description>
-     <frameworkName>Jenkins Scheduler</frameworkName>
-     <role>*</role>
-     <slavesUser>jenkins</slavesUser>
-     <credentialsId></credentialsId>
-     <checkpoint>false</checkpoint>
-     <onDemandRegistration>true</onDemandRegistration>
-     <jenkinsURL></jenkinsURL>
-     <declineOfferDuration>600000</declineOfferDuration>
-     <slaveInfos>
-       <org.jenkinsci.plugins.mesos.MesosSlaveInfo>
-         <slaveCpus>2</slaveCpus>
-         <slaveMem>8192</slaveMem>
-         <executorCpus>0.5</executorCpus>
-         <maxExecutors>2</maxExecutors>
-         <executorMem>1024</executorMem>
-         <remoteFSRoot>jenkins</remoteFSRoot>
-         <idleTerminationMinutes>3</idleTerminationMinutes>
-         <jvmArgs>-Xms16m -XX:+UseConcMarkSweepGC -Djava.net.preferIPv4Stack=true</jvmArgs>
-         <jnlpArgs>-noReconnect</jnlpArgs>
-         <defaultSlave>false</defaultSlave>
-         <mode>NORMAL</mode>
-         <nodeProperties/>
-         <labelString>mesos</labelString>
-       </org.jenkinsci.plugins.mesos.MesosSlaveInfo>
-     </slaveInfos>
-   </org.jenkinsci.plugins.mesos.MesosCloud>
- </clouds>
 </hudson>

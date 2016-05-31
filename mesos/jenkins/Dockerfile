@@ -50,12 +50,15 @@ RUN apt-get install -y docker-engine
 # Clean up
 RUN rm -Rf /var/lib/apt/*
 
-ENV REF_DIR /usr/share/jenkins/ref
+# Add default jobs, config
+COPY connect-slave.sh /usr/local/bin/
 
+ENV REF_DIR /usr/share/jenkins/ref
 ADD defaults.tgz $REF_DIR
 COPY plugins.txt $REF_DIR/
 
 RUN chown -R jenkins $REF_DIR
 USER jenkins
 
+# Install plugins
 RUN /usr/local/bin/plugins.sh $REF_DIR/plugins.txt
