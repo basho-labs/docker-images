@@ -7,7 +7,7 @@ MARATHON 	?= localhost:8080
 .PHONY = install push deploy clean
 
 defaults.tgz:
-	tar zcvf $(@) *.xml init.groovy.d/ 
+	tar zcvf $(@) *.xml init.groovy.d/ nodes/
 
 install: defaults.tgz
 	docker build -t $(TAG) .
