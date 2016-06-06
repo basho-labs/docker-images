@@ -1,6 +1,7 @@
 FROM = alpine
 MAINTAINER = Jon Brisbin <jbrisbin@basho.com>
 TAG = basho/dcoscli
+DOCKER_BUILD_OPTS = --no-cache
 
 OVERLAYS = base dcoscli
 
