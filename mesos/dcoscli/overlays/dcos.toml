@@ -6,5 +6,5 @@ email = "dcos"
 [marathon]
 url = "{{marathon_url}}"
 [package]
-sources = ["https://github.com/basho-labs/riak-mesos-dcos-repo/archive/1.0-rc1.zip", "https://universe.mesosphere.com/repo"]
+sources = ["https://github.com/basho-labs/riak-mesos-dcos-repo/archive/1.0.0.zip", "https://universe.mesosphere.com/repo"]
 cache = "/var/cache/dcos"
