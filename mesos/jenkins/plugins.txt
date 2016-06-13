@@ -1,4 +1,4 @@
-#ace-editor
+ace-editor
 ansicolor
 ant
 #antisamy-markup-formatter
@@ -72,6 +72,6 @@ workflow-cps
 #workflow-durable-task-step
 #workflow-job
 #workflow-multibranch
-#workflow-scm-step
+workflow-scm-step
 workflow-step-api
 workflow-support
