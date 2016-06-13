@@ -6,7 +6,7 @@ USER root
 # Set user password
 RUN usermod -G shadow -a -p 4Dm3fH39Geavs jenkins
 
-# Configure SSH 
+# Configure SSH
 RUN echo "StrictHostKeyChecking no" >>/etc/ssh/ssh_config
 RUN echo "UserKnownHostsFile /dev/null" >>/etc/ssh/ssh_config
 
@@ -51,8 +51,11 @@ RUN apt-get install -y docker-engine
 RUN rm -Rf /var/lib/apt/*
 
 # Add default jobs, config
-COPY connect-slave.sh /usr/local/bin/
+COPY connect-slave.sh /usr/local/bin/connect-slave.sh
 RUN chmod a+x /usr/local/bin/connect-slave.sh
+
+COPY jenkins.sh /usr/local/bin/jenkins.sh
+RUN chmod a+x /usr/local/bin/jenkins.sh
 
 ENV REF_DIR /usr/share/jenkins/ref
 ADD defaults.tgz $REF_DIR

@@ -15,14 +15,14 @@ Thread.start {
   def nodes = []
   new JsonSlurper().parseText(slavesJson)["slaves"].each {
     def parts = it.id.split('-')
-    name = "${parts[0]}-${parts[-1]}"
+    name = "${parts[0]}-${parts[-1]}".toLowerCase()
     def slave = new DumbSlave(name, "/tmp", launcher)
     nodeMgr.addNode(slave)
-    nodes << [name, it.hostname, slave]
+    nodes << [name: name, hostname: it.hostname, slave: slave]
   }
   nodeMgr.save()
 
   nodes.each {
-    println "connect-slave.sh $host:$port ${it[1]} ${it[0]} ${it[2].getComputer().getJnlpMac()}".execute().text
+    println "connect-slave.sh $host:$port ${it.hostname} ${it.name} ${it.slave.getComputer().getJnlpMac()}".execute().text
   }
 }

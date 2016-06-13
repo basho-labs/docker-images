@@ -7,7 +7,7 @@ MARATHON 	?= localhost:8080
 .PHONY = install push deploy clean
 
 defaults.tgz:
-	tar zcvf $(@) *.xml init.groovy.d/ jobs/configure-jenkins-user/
+	tar zcvf $(@) *.xml init.groovy.d/
 
 install: defaults.tgz
 	docker build -t $(TAG) .

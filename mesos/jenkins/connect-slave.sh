@@ -6,7 +6,7 @@ curl -sSL -XPOST -H "Content-Type: application/json" -d @- "http://marathon.meso
   "mem": 4096,
   "instances": 1,
   "cmd": "java -jar slave.jar -jnlpUrl http://$1/computer/$3/slave-agent.jnlp -secret $4",
-  "constraints": [["hostname", "CLUSTER", "$2"]]
+  "constraints": [["hostname", "CLUSTER", "$2"]],
   "uris": [
     "http://$1/jnlpJars/slave.jar"
   ]
