@@ -5,5 +5,11 @@
   <noUserCommitMessage>true</noUserCommitMessage>
   <displayStatus>true</displayStatus>
   <commitMessagePattern>[message]</commitMessagePattern>
-  <manualSynchronizationIncludes/>
+  <manualSynchronizationIncludes>
+    <include>jenkins.*.xml</include>
+    <include>org.jfrog.hudson.ArtifactoryBuilder.xml</include>
+    <include>org.jenkinsci.plugins.*.xml</include>
+    <include>hudson.*.xml</include>
+    <include>org.jvnet.hudson.plugins.repositoryconnector.RepositoryConfiguration.xml</include>
+  </manualSynchronizationIncludes>
 </hudson.plugins.scm__sync__configuration.ScmSyncConfigurationPlugin>

@@ -57,6 +57,9 @@ RUN chmod a+x /usr/local/bin/connect-slave.sh
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 RUN chmod a+x /usr/local/bin/jenkins.sh
 
+COPY gitconfig $JENKINS_HOME/.gitconfig
+RUN chown jenkins:jenkins $JENKINS_HOME/.gitconfig
+
 ENV REF_DIR /usr/share/jenkins/ref
 ADD defaults.tgz $REF_DIR
 COPY plugins.txt $REF_DIR/
