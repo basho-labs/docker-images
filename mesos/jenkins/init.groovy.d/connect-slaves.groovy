@@ -19,7 +19,7 @@ Thread.start {
     names[name] = it.hostname
     def slave = new DumbSlave(name, "/tmp", launcher)
     nodeMgr.addNode(slave)
-    println "connect-slave.sh $host:$port ${it.hostname} ${k} ${slave.getComputer().getJnlpMac()}"//.execute()
+    println "connect-slave.sh $host:$port ${it.hostname} ${k} ${slave.getComputer().getJnlpMac()}".execute()
   }
   nodeMgr.save()
 }
