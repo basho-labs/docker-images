@@ -12,11 +12,9 @@ def     launcher  = new JNLPLauncher()
 
 Thread.start {
   def slavesJson = "http://leader.mesos:5050/slaves".toURL().getText()
-  def names = [:]
   new JsonSlurper().parseText(slavesJson)["slaves"].each {
     def parts = it.id.split('-')
     name = "${parts[0]}-${parts[-1]}"
-    names[name] = it.hostname
     def slave = new DumbSlave(name, "/tmp", launcher)
     nodeMgr.addNode(slave)
     println "connect-slave.sh $host:$port ${it.hostname} ${k} ${slave.getComputer().getJnlpMac()}".execute()
