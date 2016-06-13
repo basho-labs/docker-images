@@ -1,4 +1,5 @@
 ace-editor
+ansicolor
 ant
 antisamy-markup-formatter
 artifactory
@@ -6,7 +7,7 @@ authentication-tokens
 branch-api
 build-history-metrics-plugin
 cloudbees-folder
-credentials:2.0.6
+credentials
 cvs
 docker-build-publish
 docker-commons
@@ -27,6 +28,7 @@ github
 gradle
 handlebars
 hipchat
+htmlpublisher
 icon-shim
 jackson2-api
 javadoc
@@ -40,8 +42,9 @@ matrix-auth
 matrix-combinations-parameter
 matrix-project
 maven-plugin
-metrics
 mesos
+metrics
+modernstatus
 momentjs
 pam-auth
 pipeline-build-step

@@ -11,7 +11,7 @@ try:
 except ImportError:
   import simplejson as json
 
-p = argparse.ArgumentParser(description='inventory script that queries a Mesos cluster via Marathon')
+p = argparse.ArgumentParser(description='inventory script that queries a Mesos cluster for slave info')
 grp = p.add_mutually_exclusive_group(required=True)
 grp.add_argument('--list', action='store_true', help='list all hosts')
 grp.add_argument('--host', help='get meta for specific host')

@@ -6,16 +6,15 @@ USER root
 # Set user password
 RUN usermod -G shadow -a -p 4Dm3fH39Geavs jenkins
 
-# Configure SSH for no prompts
+# Configure SSH 
 RUN echo "StrictHostKeyChecking no" >>/etc/ssh/ssh_config
+RUN echo "UserKnownHostsFile /dev/null" >>/etc/ssh/ssh_config
 
 # Set up an ansible inventory based on Marathon
 RUN mkdir -p /etc/ansible
-COPY marathon-inventory.py /etc/ansible/hosts
+COPY mesos-inventory.py /etc/ansible/hosts
 RUN chmod +x /etc/ansible/hosts
 ENV \
-  MARATHON_URL=http://marathon.mesos:8080 \
-  APP_ID='.*' \
   GROUP=mesos
 
   # Install basic utilities
@@ -30,13 +29,14 @@ RUN pip install ansible
 
 # Install apt repos
 RUN echo "deb https://apt.dockerproject.org/repo debian-jessie main" >/etc/apt/sources.list.d/docker.list
-RUN echo "deb http://repos.mesosphere.io/debian/ jessie main" > /etc/apt/sources.list.d/mesos.list
+RUN echo "deb http://repos.mesosphere.io/debian/ jessie main" >/etc/apt/sources.list.d/mesos.list
 
 # Install Keys
 RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv E56151BF
 RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv 2C52609D
 
-RUN apt-get update
+RUN apt-key update -y
+RUN apt-get update -y
 
 # Install Apache Mesos
 RUN apt-get install -y mesos
@@ -52,6 +52,7 @@ RUN rm -Rf /var/lib/apt/*
 
 # Add default jobs, config
 COPY connect-slave.sh /usr/local/bin/
+RUN chmod a+x /usr/local/bin/connect-slave.sh
 
 ENV REF_DIR /usr/share/jenkins/ref
 ADD defaults.tgz $REF_DIR
