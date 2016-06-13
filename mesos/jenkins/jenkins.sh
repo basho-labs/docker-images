@@ -29,6 +29,7 @@ echo "--- Copying files at $(date)" >> "$COPY_REFERENCE_FILE_LOG"
 find /usr/share/jenkins/ref/ -type f -exec bash -c "copy_reference_file '{}'" \;
 
 sed -i "s#\${JENKINS_CONFIG_REPO}#$JENKINS_CONFIG_REPO#g" $JENKINS_HOME/scm-sync-configuration.xml
+cp -R $MESOS_SANDBOX/.ssh $JENKINS_HOME/.ssh
 
 # if `docker run` first argument start with `--` the user is passing jenkins launcher arguments
 if [[ $# -lt 1 ]] || [[ "$1" == "--"* ]]; then
