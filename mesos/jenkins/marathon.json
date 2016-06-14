@@ -35,5 +35,11 @@
       "ignoreHttp1xx": false
     }
   ],
-  "user": "jenkins"
+  "user": "jenkins",
+  "env": {
+    "JENKINS_CONFIG_REPO": "basho-bin/jenkins-mesos-softlayer"
+  },
+  "uris": [
+    "file:///home/jenkins/ssh.tar.gz"
+  ]
 }
