@@ -10,6 +10,7 @@ VOLUME /var/log/riak
 VOLUME /var/lib/riak
 
 COPY $CURDIR/riak-cluster.sh /usr/lib/riak/riak-cluster.sh
+RUN chmod a+x /usr/lib/riak/riak-cluster.sh
 
 # Install the Python client
 RUN \
