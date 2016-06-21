@@ -1,5 +1,8 @@
 # Riak TS
 
+This image is built from a [`docker.mk`](https://github.com/jbrisbin/docker.mk) enabled repository:
+[https://github.com/basho-labs/docker-images/tree/master/riak](https://github.com/basho-labs/docker-images/tree/master/riak)
+
 [Riak TS](http://basho.com/products/riak-ts/) is a [timeseries](https://en.wikipedia.org/wiki/Time_series) database special-built for storage and analysis of timeseries data that is architected on the foundation of the Riak NoSQL database. It has been tailor-made to provide the same operational simplicity and flexibility of [Riak KV](https://github.com/basho/riak) but with special emphasis on dealing with time-based data.
 
 ### Starting a Riak TS cluster
@@ -35,9 +38,7 @@ services:
 
 If you bring up the cluster now, you'll get a 2-node cluster.
 
-```
-$ docker-compose up -d
-```
+    $ docker-compose up -d
 
 Open Riak Explorer in the browser by navigating to [localhost:8098/admin/](http://localhost:8098/admin/).
 
@@ -47,9 +48,7 @@ You can now create bucket types and Riak TS tables using the explorer web UI. Th
 
 You can scale the cluster to multiple nodes by using `docker-compose` and scaling the `secondary` service to the number of nodes you want.
 
-```
-$ docker-compose scale secondary=4
-```
+    $ docker-compose scale secondary=4
 
 The above will scale the cluster to 5 total nodes (1 primary + 4 secondary). If you refresh [the OPS page in Riak Explorer](http://localhost:8098/admin/#/cluster/default/ops) you should see the new nodes (they'll be using the Docker internal IPs which are 172.18.0.X).
 
@@ -65,8 +64,6 @@ To discover the HOST:PORT values needed to connect to the Riak nodes running in 
 
 Set an environment variable to hold the HOST:PORT pairs.
 
-```
-$ export RIAK_HOSTS=$(echo $(docker inspect $(docker ps -q -f label=com.basho.riakts.cluster.name=test) | jq -r '.[] | "localhost:" + .NetworkSettings.Ports."8087/tcp"[0].HostPort') | tr ' ' ',')
-```
+    $ export RIAK_HOSTS=$(echo $(docker inspect $(docker ps -q -f label=com.basho.riakts.cluster.name=test) | jq -r '.[] | "localhost:" + .NetworkSettings.Ports."8087/tcp"[0].HostPort') | tr ' ' ',')
 
 Note: if you change the label `com.basho.riakts.cluster.name` in the `docker-compose` configuration, you'll need to make sure the `docker ps` filter in the above command reflects this change.

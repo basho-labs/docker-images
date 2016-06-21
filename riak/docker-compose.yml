@@ -1,0 +1,22 @@
+version: "2"
+services:
+  primary:
+    image: basho/riak-ts
+    ports:
+      - "8087:8087"
+      - "8098:8098"
+    labels:
+      - "com.basho.riakts.cluster.name=test"
+  secondary:
+    image: basho/riak-ts
+    ports:
+      - "8087"
+      - "8098"
+    labels:
+      - "com.basho.riakts.cluster.name=test"
+    links:
+      - primary
+    depends_on:
+      - primary
+    environment:
+      - PRIMARY_NODE=primary
