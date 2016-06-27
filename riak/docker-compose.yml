@@ -6,7 +6,7 @@ services:
       - "8087:8087"
       - "8098:8098"
     labels:
-      - "com.basho.riakts.cluster.name=test"
+      - "com.basho.riak.cluster.name=test"
     volumes:
       - schemas:/etc/riak/schemas
   secondary:
@@ -15,7 +15,7 @@ services:
       - "8087"
       - "8098"
     labels:
-      - "com.basho.riakts.cluster.name=test"
+      - "com.basho.riak.cluster.name=test"
     links:
       - primary
     depends_on:
@@ -25,4 +25,4 @@ services:
 
 volumes:
   schemas:
-    external: true
+    external: false
