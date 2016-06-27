@@ -17,7 +17,22 @@ sed -i -r "s#listener\.http\.internal = (.*)#listener.http.internal = $HOST:8098
 $RIAK start
 $RIAK_ADMIN wait-for-service riak_kv
 
-if [ "$PRIMARY_NODE" != "$HOSTNAME" ]; then
+# Create TS buckets
+for f in $(find /etc/riak/schemas/ -name *.sql -print); do
+  BUCKET_NAME=$(basename -s .sql $f)
+  BUCKET_DEF=$(cat $f)
+  $RIAK_ADMIN bucket-type create $BUCKET_NAME '{"props":{"table_def":"'$BUCKET_DEF'"}}'
+  $RIAK_ADMIN bucket-type activate $BUCKET_NAME
+done
+# Create KV bucket types
+for f in $(find /etc/riak/schemas/ -name *.dt -print); do
+  BUCKET_NAME=$(basename -s .dt $f)
+  BUCKET_DT=$(cat $f)
+  $RIAK_ADMIN bucket-type create $BUCKET_NAME '{"props":{"datatype":"'$BUCKET_DT'"}}'
+  $RIAK_ADMIN bucket-type activate $BUCKET_NAME
+done
+
+if [ "$PRIMARY_NODE_HOST" != "$HOST" ]; then
   echo "Connecting to cluster @ $PRIMARY_NODE"
   curl -sSL $HOST:8098/admin/control/clusters/default/join/riak@$PRIMARY_NODE_HOST
 fi

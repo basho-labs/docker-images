@@ -1,14 +1,16 @@
 version: "2"
 services:
   primary:
-    image: basho/riak-ts
+    image: basho/riak-ts:1.3.1
     ports:
       - "8087:8087"
       - "8098:8098"
     labels:
       - "com.basho.riakts.cluster.name=test"
+    volumes:
+      - schemas:/etc/riak/schemas
   secondary:
-    image: basho/riak-ts
+    image: basho/riak-ts:1.3.1
     ports:
       - "8087"
       - "8098"
@@ -20,3 +22,7 @@ services:
       - primary
     environment:
       - PRIMARY_NODE=primary
+
+volumes:
+  schemas:
+    external: true

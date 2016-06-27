@@ -24,5 +24,7 @@ RUN \
 EXPOSE 8087
 EXPOSE 8098
 
+RUN mkdir -p /etc/riak/schemas
+
 WORKDIR /var/lib/riak
 CMD ["/usr/lib/riak/riak-cluster.sh"]
