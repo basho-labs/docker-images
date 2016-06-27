@@ -1,0 +1,3 @@
+ENV \
+  DEBIAN_FRONTEND=noninteractive \
+  DEBCONF_NONINTERACTIVE_SEEN=true
