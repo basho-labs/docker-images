@@ -1,10 +1,11 @@
 
 # Install DCOS
+RUN pip install --upgrade pip
 RUN pip install 'dcoscli==0.3.2'
 
 # Set up DCOS user
 ENV HOME /var/lib/dcos
-RUN adduser -h $HOME -s /bin/bash -D dcos
+RUN useradd -d $HOME -s /bin/bash dcos
 COPY $CURDIR/bashrc $HOME/.bashrc
 
 # Configure DCOS
