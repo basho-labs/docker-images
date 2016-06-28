@@ -5,7 +5,7 @@ RUN echo "deb https://packagecloud.io/basho/riak-ts/ubuntu/ trusty main" >/etc/a
 RUN echo "deb-src https://packagecloud.io/basho/riak-ts/ubuntu/ trusty main" >>/etc/apt/sources.list.d/basho_riak-ts.list
 RUN apt-get update
 RUN apt-get install -y riak-ts
-RUN curl -sSL https://basholabs.artifactoryonline.com/basholabs/riak-mesos-framework/ubuntu-14.04/riak-explorer/1.1.0/riak_explorer-1.1.0.patch-ubuntu-14.04.tar.gz | tar -zxf - -C /usr/lib/riak --strip-components 2
+RUN curl -sSL https://github.com/basho-labs/riak_explorer/releases/download/1.1.0/riak_explorer-1.1.0.patch-ubuntu-14.04.tar.gz | tar -zxf - -C /usr/lib/riak --strip-components 2
 
 VOLUME /var/log/riak
 VOLUME /var/lib/riak
