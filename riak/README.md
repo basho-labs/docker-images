@@ -7,35 +7,38 @@ This image is built from a [`docker.mk`](https://github.com/jbrisbin/docker.mk) 
 
 ### Starting a Riak TS cluster
 
-You can start a simple Riak TS cluster using `docker-compose`. Create a working directory named `riak-ts` and inside that directory create a file named `docker-compose.yml` based on the following example.
+You can start a simple Riak TS cluster using `docker-compose`. Create a working directory named `riak` and inside that directory create a file named `docker-compose.yml` based on the following example.
 
-Note: the `primary` node is the first one to be started in the cluster and is the node to which all the others will join. It's also the only container exposed on a predictable port.
+Note: the `coordinator` node is the first one to be started in the cluster and is the node to which all the others will join. It's also the only container exposed on a predictable port.
 
 ```yaml
 version: "2"
 services:
-  primary:
-    image: basho/riak-ts:1.3.1
+  coordinator:
+    image: basho/riak-ts
     ports:
       - "8087:8087"
       - "8098:8098"
+    environment:
+      - CLUSTER_NAME=${CLUSTER_NAME}
     labels:
-      - "com.basho.riak.cluster.name=test"
+      - "com.basho.riak.cluster.name=${CLUSTER_NAME}"
     volumes:
       - schemas:/etc/riak/schemas
-  secondary:
-    image: basho/riak-ts:1.3.1
+  member:
+    image: basho/riak-ts
     ports:
       - "8087"
       - "8098"
     labels:
-      - "com.basho.riak.cluster.name=test"
+      - "com.basho.riak.cluster.name=${CLUSTER_NAME}"
     links:
-      - primary
+      - coordinator
     depends_on:
-      - primary
+      - coordinator
     environment:
-      - PRIMARY_NODE=primary
+      - CLUSTER_NAME=${CLUSTER_NAME}
+      - COORDINATOR_NODE=coordinator
 
 volumes:
   schemas:
@@ -44,19 +47,20 @@ volumes:
 
 If you bring up the cluster now, you'll get a 2-node cluster.
 
-    $ docker-compose up -d
+    $ export CLUSTER_NAME=test
+    $ docker-compose up
 
-Open Riak Explorer in the browser by navigating to [localhost:8098/admin/](http://localhost:8098/admin/).
+When the cluster has started, open Riak Explorer in the browser by navigating to [localhost:8098/admin/](http://localhost:8098/admin/).
 
 You can now create bucket types and Riak TS tables using the explorer web UI. There is also [a comprehensive REST API](http://basho-labs.github.io/riak_explorer/docs/api.html) your applications can leverage when interacting with this Dockerized cluster.
 
 ### Scaling the Cluster
 
-You can scale the cluster to multiple nodes by using `docker-compose` and scaling the `secondary` service to the number of nodes you want.
+You can scale the cluster to multiple nodes by using `docker-compose` and scaling the `member` service to the number of nodes you want.
 
-    $ docker-compose scale secondary=4
+    $ docker-compose scale member=4
 
-The above will scale the cluster to 5 total nodes (1 primary + 4 secondary). If you refresh [the OPS page in Riak Explorer](http://localhost:8098/admin/#/cluster/default/ops) you should see the new nodes (they'll be using the Docker internal IPs which are 172.18.0.X).
+The above will scale the cluster to 5 total nodes (1 coordinator + 4 members). If you refresh [the OPS page in Riak Explorer](http://localhost:8098/admin/#/cluster/default/ops) you should see the new nodes (they'll be using the Docker internal IPs which are 172.18.0.X).
 
 ### Volumes for data
 
@@ -70,7 +74,7 @@ To discover the HOST:PORT values needed to connect to the Riak nodes running in 
 
 Set an environment variable to hold the HOST:PORT pairs.
 
-    $ export RIAK_HOSTS=$(echo $(docker inspect $(docker ps -q -f label=com.basho.riak.cluster.name=test) | jq -r '.[] | "localhost:" + .NetworkSettings.Ports."8087/tcp"[0].HostPort') | tr ' ' ',')
+    $ export RIAK_HOSTS=$(echo $(docker inspect $(docker ps -q -f label=com.basho.riak.cluster.name=$CLUSTER_NAME) | jq -r '.[] | "localhost:" + .NetworkSettings.Ports."8087/tcp"[0].HostPort') | tr ' ' ',')
 
 Note: if you change the label `com.basho.riak.cluster.name` in the `docker-compose` configuration, you'll need to make sure the `docker ps` filter in the above command reflects this change.
 
