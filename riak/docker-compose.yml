@@ -27,5 +27,4 @@ services:
       - COORDINATOR_NODE=coordinator
 
 volumes:
-  schemas:
-    external: false
+  schemas: {}
