@@ -9,4 +9,6 @@ RUN \
   pip install --upgrade pyopenssl && \
   yum -q -y --exclude=kernel* update
 RUN \
+  pip install pytest Jinja2
+RUN \
   gem install fpm

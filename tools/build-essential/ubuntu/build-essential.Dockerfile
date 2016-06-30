@@ -8,4 +8,6 @@ RUN \
   pip install --upgrade pyopenssl && \
   apt-get dist-upgrade -y
 RUN \
+  pip install pytest Jinja2
+RUN \
   gem install fpm

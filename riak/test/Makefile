@@ -3,8 +3,11 @@ RUN = docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock -v `pwd`:
 
 .PHONY = clean debug test
 
+build:
+	docker build -t $(TAG) .
+
 clean:
-	rm -Rf .cache __pycache__
+	rm -Rf .cache __pycache__ *.pyc
 	docker rm $(docker images -q basho/riak-container-test)
 
 debug:
