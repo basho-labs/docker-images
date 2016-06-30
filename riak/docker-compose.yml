@@ -6,9 +6,9 @@ services:
       - "8087:8087"
       - "8098:8098"
     environment:
-      - CLUSTER_NAME=${CLUSTER_NAME}
+      - CLUSTER_NAME=riakts
     labels:
-      - "com.basho.riak.cluster.name=${CLUSTER_NAME}"
+      - "com.basho.riak.cluster.name=riakts"
     volumes:
       - schemas:/etc/riak/schemas
   member:
@@ -17,14 +17,19 @@ services:
       - "8087"
       - "8098"
     labels:
-      - "com.basho.riak.cluster.name=${CLUSTER_NAME}"
+      - "com.basho.riak.cluster.name=riakts"
     links:
       - coordinator
     depends_on:
       - coordinator
     environment:
-      - CLUSTER_NAME=${CLUSTER_NAME}
+      - CLUSTER_NAME=riakts
       - COORDINATOR_NODE=coordinator
 
 volumes:
   schemas: {}
+
+networks:
+  default:
+    external:
+      name: riak

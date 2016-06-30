@@ -9,16 +9,18 @@ class RiakCluster:
 
   def __init__(self, name):
     self.name = name
-    self.env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
+    self.env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
     self.tpl = self.env.get_template('docker-compose.yml.tpl')
 
   def start(self):
     with open('docker-compose.yml', 'w') as yaml:
       yaml.write(self.tpl.render(image=self.name,
-                                 cluster_name=self.name,
                                  schemas_dir="%s/schemas" % os.getcwd()))
 
     subprocess.call(['docker-compose', 'up', '-d', 'coordinator'])
+
+    for i in self.inspect():
+      subprocess.call(['docker', 'exec', i['Id'], 'riak-admin', 'wait-for-service', 'riak_kv'])
 
   def stop(self):
     subprocess.call(['docker-compose', 'down'])
@@ -26,12 +28,10 @@ class RiakCluster:
 
   def ips(self):
     info = self.inspect()
-    addrs = [ i['NetworkSettings']['Networks'].values()[0]['IPAddress'] for i in info ]
-    ports = [ int(i['NetworkSettings']['Ports']['8087/tcp'][0]['HostPort']) for i in info ]
-    return zip(addrs, ports)
+    return [ i['NetworkSettings']['Networks']['riak']['IPAddress'] for i in info ]
 
   def inspect(self):
-    ids = subprocess.check_output(['docker', 'ps', '-q', '-f', "label=com.basho.riak.cluster.name=%s" % self.name]).strip().split('\n')
+    ids = subprocess.check_output(['docker', 'ps', '-q', '-f', "label=com.basho.riak.cluster.name=%s" % os.environ['HOSTNAME']]).strip().split('\n')
 
     info = []
     for id in ids:

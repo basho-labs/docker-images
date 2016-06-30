@@ -5,10 +5,7 @@ from riak_test.test import cluster
 class TestRiakContainer:
 
   def test_can_start_single_node(self, cluster):
-
+    # Should be 1 node: the coordinator
     assert len(cluster.ips()) == 1
-
-    print ("nodes: %s" % [ RiakNode(host=ip[0], pbc_port=ip[1]) for ip in cluster.ips() ])
-
-    cl = RiakClient(nodes=[ RiakNode(host=ip[0], pbc_port=ip[1]) for ip in cluster.ips() ])
-    # assert cl.ping()
+    # Should be able to ping the node on internal IP
+    assert RiakClient(nodes=[RiakNode(host=ip) for ip in cluster.ips()]).ping()
