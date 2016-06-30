@@ -12,6 +12,7 @@ COPY $CURDIR/bashrc $HOME/.bashrc
 RUN mkdir -p $HOME/.dcos /etc/riak-mesos /var/cache/dcos
 COPY $CURDIR/dcos.toml $HOME/.dcos
 RUN chown -R dcos:dcos $HOME /var/cache/dcos /etc/riak-mesos
+RUN chmod 0600 $HOME/.dcos/dcos.toml
 
 COPY $CURDIR/dcos.sh /
 RUN chmod 0755 /dcos.sh
