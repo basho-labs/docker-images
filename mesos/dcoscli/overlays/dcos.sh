@@ -2,7 +2,7 @@
 
 if [[ ! -z "$@" ]]; then
   . $HOME/.bashrc
-  dcos $@
+  dcos "$@"
 else
   bash -i
 fi
