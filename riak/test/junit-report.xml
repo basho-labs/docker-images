@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="0" name="pytest" skips="0" tests="2" time="24.904"><testcase classname="test_riak_container.TestRiakContainer" file="test_riak_container.py" line="5" name="test_can_start_single_node[basho/riak-ts]" time="12.6174051762"><system-out>[u&apos;172.18.0.2:32857&apos;]
+</system-out><system-err>Creating network &quot;test_default&quot; with the default driver
+Creating test_coordinator_1
+</system-err></testcase><testcase classname="test_riak_container.TestRiakContainer" file="test_riak_container.py" line="5" name="test_can_start_single_node[basho/riak-kv]" time="12.187677145"><system-out>[u&apos;172.18.0.2:32859&apos;]
+</system-out><system-err>Creating network &quot;test_default&quot; with the default driver
+Creating test_coordinator_1
+</system-err></testcase></testsuite>
