@@ -5,6 +5,7 @@ CONTAINER_NAME = riak-container-test
 RUN = docker run --rm -it --net riak $(DOCKER_SOCK) $(WORK_DIR) $(BASE_IMG)
 
 .container:
+	docker network create riak
 	docker run --name=$(CONTAINER_NAME) $(BASE_IMG) pip install riak
 	docker commit $(CONTAINER_NAME) $(BASE_IMG)
 	@docker ps -aqf name=$(CONTAINER_NAME) >.container
@@ -13,9 +14,6 @@ RUN = docker run --rm -it --net riak $(DOCKER_SOCK) $(WORK_DIR) $(BASE_IMG)
 
 pull:
 	docker pull $(BASE_IMG)
-
-build: .container
-	docker network create riak
 
 clean:
 	rm -Rf .cache __pycache__ *.pyc riak_test/*.pyc
