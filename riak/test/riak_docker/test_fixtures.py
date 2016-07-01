@@ -18,9 +18,7 @@ class RiakCluster:
                                  schemas_dir="%s/schemas" % os.getcwd()))
 
     subprocess.call(['docker-compose', 'up', '-d', 'coordinator'])
-
-    for i in self.inspect():
-      subprocess.call(['docker', 'exec', i['Id'], 'riak-admin', 'wait-for-service', 'riak_kv'])
+    self.wait()
 
   def stop(self):
     subprocess.call(['docker-compose', 'down'])
@@ -41,7 +39,13 @@ class RiakCluster:
     return info
 
   def scale(self, nodes):
-    subprocess.call(['docker-compose', 'scale', "member=%i" % nodes])
+    subprocess.call(['docker-compose', 'scale', "member=%i" % (nodes-1)])
+    self.wait()
+
+  def wait(self):
+    # Wait for all nodes to settle
+    for i in self.inspect():
+      subprocess.call(['docker', 'exec', i['Id'], 'riak-admin', 'wait-for-service', 'riak_kv'])
 
 @pytest.fixture(params=['basho/riak-ts', 'basho/riak-kv'])
 def cluster(request):

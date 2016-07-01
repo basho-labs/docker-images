@@ -3,3 +3,4 @@ __pycache__
 *.pyc
 docker-compose.yml
 test-report.xml
+.container

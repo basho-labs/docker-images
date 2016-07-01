@@ -1,30 +1,35 @@
 DOCKER_SOCK = -v /var/run/docker.sock:/var/run/docker.sock
 WORK_DIR = -v `pwd`:/usr/src/test -w /usr/src/test
 BASE_IMG = basho/build-essential:ubuntu-14.04
+CONTAINER_NAME = riak-container-test
 RUN = docker run --rm -it --net riak $(DOCKER_SOCK) $(WORK_DIR) $(BASE_IMG)
 
-.PHONY = pull build clean shell debug test
+.container:
+	docker run --name=$(CONTAINER_NAME) $(BASE_IMG) pip install riak
+	docker commit $(CONTAINER_NAME) $(BASE_IMG)
+	@docker ps -aqf name=$(CONTAINER_NAME) >.container
+
+.PHONY = pull build clean dist-clean shell debug test
 
 pull:
 	docker pull $(BASE_IMG)
 
-build:
+build: .container
 	docker network create riak
-	docker run --name=riak-container-test $(BASE_IMG) pip install riak
-	docker commit riak-container-test $(BASE_IMG)
 
 clean:
 	rm -Rf .cache __pycache__ *.pyc riak_test/*.pyc
 
-dist-clean:
+dist-clean: clean
 	docker rm -vf riak-container-test
+	rm -f .container
 	docker network rm riak
 
-shell:
+shell: .container
 	$(RUN) bash
 
-debug:
+debug: .container
 	$(RUN) py.test -v --pdb
 
-test:
+test: .container
 	$(RUN) py.test -v --junit-xml=test-report.xml
