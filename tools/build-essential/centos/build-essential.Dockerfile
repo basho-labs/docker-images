@@ -10,5 +10,5 @@ RUN \
   yum -q -y --exclude=kernel* update
 RUN \
   pip install pytest Jinja2
-RUN \
-  gem install fpm
+#RUN \
+#  gem install fpm
