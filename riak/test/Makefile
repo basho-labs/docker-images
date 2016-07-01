@@ -2,7 +2,7 @@ DOCKER_SOCK = -v /var/run/docker.sock:/var/run/docker.sock
 WORK_DIR = -v `pwd`:/usr/src/test -w /usr/src/test
 BASE_IMG = basho/build-essential:ubuntu-14.04
 CONTAINER_NAME = riak-container-test
-RUN = docker run --rm -it --net riak $(DOCKER_SOCK) $(WORK_DIR) $(CONTAINER_NAME)
+RUN = docker run --rm --net riak $(DOCKER_SOCK) $(WORK_DIR) $(CONTAINER_NAME)
 
 .container:
 	@echo "Creating network riak"
