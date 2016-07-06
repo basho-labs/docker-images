@@ -29,6 +29,7 @@ icon-shim
 jackson2-api
 javadoc
 jquery-detached
+jquery
 junit
 ldap
 mailer
