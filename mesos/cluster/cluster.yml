@@ -1,0 +1,117 @@
+version: '2'
+
+services:
+    mesos_cluster_zk_1:
+        image: mesos_cluster_node
+        container_name: mesos_cluster_zk_1
+        environment:
+            - NODE_MODE=mesos_zk
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
+        networks:
+            app_net:
+                ipv4_address: 172.16.200.11
+    mesos_cluster_zk_2:
+        image: mesos_cluster_node
+        container_name: mesos_cluster_zk_2
+        environment:
+            - NODE_MODE=mesos_zk
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
+        networks:
+            app_net:
+                ipv4_address: 172.16.200.12
+    mesos_cluster_zk_3:
+        image: mesos_cluster_node
+        container_name: mesos_cluster_zk_3
+        environment:
+            - NODE_MODE=mesos_zk
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
+        networks:
+            app_net:
+                ipv4_address: 172.16.200.13
+    mesos_cluster_master_1:
+        image: mesos_cluster_node
+        environment:
+            - NODE_MODE=mesos_master
+            - MESOS_IP=172.16.200.21
+            - MESOS_HOSTNAME=172.16.200.21
+            - MESOS_QUORUM=2
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
+        container_name: mesos_cluster_master_1
+        networks:
+            app_net:
+                ipv4_address: 172.16.200.21
+    mesos_cluster_master_2:
+        image: mesos_cluster_node
+        environment:
+            - NODE_MODE=mesos_master
+            - MESOS_IP=172.16.200.22
+            - MESOS_HOSTNAME=172.16.200.22
+            - MESOS_QUORUM=2
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
+        container_name: mesos_cluster_master_2
+        networks:
+            app_net:
+                ipv4_address: 172.16.200.22
+    mesos_cluster_master_3:
+        image: mesos_cluster_node
+        environment:
+            - NODE_MODE=mesos_master
+            - MESOS_IP=172.16.200.23
+            - MESOS_HOSTNAME=172.16.200.23
+            - MESOS_QUORUM=2
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
+        container_name: mesos_cluster_master_3
+        networks:
+            app_net:
+                ipv4_address: 172.16.200.23
+    mesos_cluster_slave_1:
+        image: mesos_cluster_node
+        environment:
+            - NODE_MODE=mesos_slave
+            - MESOS_IP=172.16.200.31
+            - MESOS_HOSTNAME=172.16.200.31
+            - MESOS_MASTER=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
+            - MESOS_FRAMEWORKS_HOME=/opt/mesos/frameworks_home
+        container_name: mesos_cluster_slave_1
+        volumes:
+            - /sys/fs/cgroup:/sys/fs/cgroup
+        networks:
+            app_net:
+                ipv4_address: 172.16.200.31
+    mesos_cluster_slave_2:
+        image: mesos_cluster_node
+        environment:
+            - NODE_MODE=mesos_slave
+            - MESOS_IP=172.16.200.32
+            - MESOS_HOSTNAME=172.16.200.32
+            - MESOS_MASTER=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
+            - MESOS_FRAMEWORKS_HOME=/opt/mesos/frameworks_home
+        container_name: mesos_cluster_slave_2
+        volumes:
+            - /sys/fs/cgroup:/sys/fs/cgroup
+        networks:
+            app_net:
+                ipv4_address: 172.16.200.32
+    mesos_cluster_slave_3:
+        image: mesos_cluster_node
+        environment:
+            - NODE_MODE=mesos_slave
+            - MESOS_IP=172.16.200.33
+            - MESOS_HOSTNAME=172.16.200.33
+            - MESOS_MASTER=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
+            - MESOS_FRAMEWORKS_HOME=/opt/mesos/frameworks_home
+        container_name: mesos_cluster_slave_3
+        volumes:
+            - /sys/fs/cgroup:/sys/fs/cgroup
+        networks:
+            app_net:
+                ipv4_address: 172.16.200.33
+
+networks:
+    app_net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.16.200.0/24
+                  gateway: 172.16.200.1
