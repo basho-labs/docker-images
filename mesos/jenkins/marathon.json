@@ -37,7 +37,7 @@
   ],
   "user": "jenkins",
   "env": {
-    "JENKINS_CONFIG_REPO": "basho-bin/jenkins-mesos-softlayer"
+    "JENKINS_CONFIG_REPO": ""
   },
   "uris": [
     "file:///home/jenkins/ssh.tar.gz"
