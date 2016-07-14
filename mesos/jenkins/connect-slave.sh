@@ -3,12 +3,12 @@ curl -sSL -XPOST -H "Content-Type: application/json" -d @- "http://marathon.meso
 {
   "id": "/jenkins/build/$3",
   "cpus": 1,
-  "mem": 4096,
+  "mem": 8192,
   "instances": 1,
-  "cmd": "java -jar slave.jar -jnlpUrl http://$1/computer/$3/slave-agent.jnlp -secret $4",
+  "cmd": "java -jar slave.jar -jnlpUrl http://$1/jenkins/computer/$3/slave-agent.jnlp -secret $4",
   "constraints": [["hostname", "CLUSTER", "$2"]],
   "uris": [
-    "http://$1/jnlpJars/slave.jar"
+    "http://$1/jenkins/jnlpJars/slave.jar"
   ]
 }
 END

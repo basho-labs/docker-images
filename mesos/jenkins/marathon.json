@@ -37,7 +37,8 @@
   ],
   "user": "jenkins",
   "env": {
-    "JENKINS_CONFIG_REPO": ""
+    "JENKINS_CONFIG_REPO": "",
+    "JENKINS_OPTS": "--prefix=/jenkins"
   },
   "uris": [
     "file:///home/jenkins/ssh.tar.gz"
