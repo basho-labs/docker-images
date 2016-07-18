@@ -18,6 +18,16 @@ RUN OS_VERSION=$(rpm -q --queryformat '%{VERSION}' centos-release) && \
     rpm -Uvh http://repos.mesosphere.io/el/${OS_VERSION}/noarch/RPMS/mesosphere-el-repo-${OS_VERSION}-1.noarch.rpm && \
     yum install -q -y mesosphere-zookeeper mesos-${MESOSPKG_BUILD_VERSION}
 
+# Mesos DNS
+RUN yum install -q -y wget
+RUN mkdir -p /usr/local/mesos-dns/
+RUN wget https://github.com/mesosphere/mesos-dns/releases/download/v0.5.1/mesos-dns-v0.5.1-linux-amd64
+RUN mv mesos-dns-v0.5.1-linux-amd64 /usr/local/mesos-dns/mesos-dns
+RUN chmod 755 /usr/local/mesos-dns/mesos-dns
+# TODO network manager can rewrite this
+RUN echo "nameserver 10.0.2.15" > /etc/resolve.conf
+COPY mesos-dns-config.json /opt
+
 # Install ifconfig
 RUN yum install -q -y net-tools
 
