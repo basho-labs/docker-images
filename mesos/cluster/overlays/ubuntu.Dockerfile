@@ -43,10 +43,8 @@ RUN mkdir -p /usr/local/mesos-dns/
 RUN wget https://github.com/mesosphere/mesos-dns/releases/download/v0.5.1/mesos-dns-v0.5.1-linux-amd64
 RUN mv mesos-dns-v0.5.1-linux-amd64 /usr/local/mesos-dns/mesos-dns
 RUN chmod 755 /usr/local/mesos-dns/mesos-dns
-# Configure Resolvconf
-RUN echo "nameserver 10.0.2.15" > /etc/resolvconf/resolv.conf.d/head
-RUN resolvconf -u
 COPY mesos-dns-config.json /opt
+COPY mesos-dns-marathon.json /opt
 
 ### Copy start scripts.
 RUN mkdir -p /opt
