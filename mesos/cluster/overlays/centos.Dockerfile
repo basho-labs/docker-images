@@ -2,6 +2,9 @@
 FROM centos:centos7
 MAINTAINER Nikolay Khabarov <2xl@mail.ru>
 
+### Environment for marathon.
+ENV MARATHONPKG_BUILD_VERSION=1.1.2
+
 ### Environment for mesos.
 ENV MESOSPKG_BUILD_VERSION=0.28.2
 ENV MESOS_LOG_DIR=/var/log/mesos
@@ -16,7 +19,8 @@ ENV ZK_CLIENT_PORT=2181
 ### Install mesos and zookeeper.
 RUN OS_VERSION=$(rpm -q --queryformat '%{VERSION}' centos-release) && \
     rpm -Uvh http://repos.mesosphere.io/el/${OS_VERSION}/noarch/RPMS/mesosphere-el-repo-${OS_VERSION}-1.noarch.rpm && \
-    yum install -q -y mesosphere-zookeeper mesos-${MESOSPKG_BUILD_VERSION}
+    yum install -q -y mesosphere-zookeeper mesos-${MESOSPKG_BUILD_VERSION} && \
+    yum install -q -y marathon-${MARATHONPKG_BUILD_VERSION}
 
 # Mesos DNS
 RUN yum install -q -y wget
@@ -30,11 +34,13 @@ COPY mesos-dns-marathon.json /opt
 # Install ifconfig
 RUN yum install -q -y net-tools
 
-### Create symlinks for compability
+### Create symlinks for compatibility
 RUN ln -s /opt/mesosphere/zookeeper /usr/share/zookeeper
 
 ### Copy start scripts.
 RUN mkdir -p /opt
+COPY start_mesos_marathon.sh /opt
+RUN chmod a+x /opt/start_mesos_marathon.sh
 COPY start_mesos_master.sh /opt
 RUN chmod a+x /opt/start_mesos_master.sh
 COPY start_mesos_slave.sh /opt
