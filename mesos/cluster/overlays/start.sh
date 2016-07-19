@@ -2,6 +2,27 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+function check_servers() {
+    RES=1
+    SN=$(ifconfig eth0 | sed -En 's/.*inet (addr:)?(([0-9]*\.){2}[0-9]*).*/\2/p')
+    for N in `seq 31 39`; do
+        if nc -z "$SN.$N" 53; then
+            echo "nameserver $SN.$N" > /etc/resolv.conf
+            RES=0
+            break
+        fi
+    done
+    return $RES
+}
+
+function search_mesosdns() {
+    while ! check_servers; do
+        sleep 1
+    done
+}
+
+search_mesosdns &
+
 case "$NODE_MODE" in
     mesos_marathon)
         $DIR/start_mesos_marathon.sh
