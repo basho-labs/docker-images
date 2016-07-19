@@ -42,6 +42,9 @@ test:
 	@echo -n Test marathon...
 	@curl -f -s -o /dev/null http://172.16.200.41:8080/ping
 	@echo ok
+	@echo -n Test mesos-dns...
+	@docker exec -i -t mesos_cluster_marathon ping -c 1 marathon.mesos > /dev/null
+	@echo ok
 	@echo
 	@echo Cluster successfully passed tests
 
