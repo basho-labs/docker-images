@@ -2,6 +2,5 @@
 
 MARATHON_PATH=/usr/bin/marathon
 
-PARAMS="--zk ${MARATHON_ZK} --master ${MARATHON_MASTER}"
-
-${MARATHON_PATH} ${PARAMS}
+# Marathon will read env variable MARATHON_ZK, MARATHON_MASTER itself
+${MARATHON_PATH}

@@ -106,6 +106,16 @@ services:
         networks:
             app_net:
                 ipv4_address: 172.16.200.33
+    mesos_cluster_marathon:
+        image: mesos_cluster_node
+        environment:
+            - NODE_MODE=mesos_marathon
+            - MARATHON_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/marathon
+            - MARATHON_MASTER=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
+        container_name: mesos_cluster_marathon
+        networks:
+            app_net:
+                ipv4_address: 172.16.200.41
 
 networks:
     app_net:
