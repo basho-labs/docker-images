@@ -31,8 +31,8 @@ RUN chmod 755 /usr/local/mesos-dns/mesos-dns
 COPY mesos-dns-config.json /opt
 COPY mesos-dns-marathon.json /opt
 
-# Install ifconfig
-RUN yum install -q -y net-tools
+# Install ifconfig and netcat
+RUN yum install -q -y net-tools nc
 
 ### Create symlinks for compatibility
 RUN ln -s /opt/mesosphere/zookeeper /usr/share/zookeeper
