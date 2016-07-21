@@ -1,0 +1,3 @@
+[submodule "riak-mesos/riak-mesos"]
+	path = riak-mesos/riak-mesos
+	url = git@github.com:basho-labs/riak-mesos.git
