@@ -13,7 +13,7 @@ clean:
 	docker ps -a | grep riak_mesos_cluster_ | awk '{print $$1}' | xargs -I {} docker rm -f {}
 	docker rmi -f ${DOCKER_IMAGE_NAME} | true
 	docker rmi -f ${MESOS_CLUSTER_DOCKER_IMAGE_NAME} | true
-	docker network rm cluster_app_net | true
+	docker network rm riakmesos_app_net | true
 
 start: all
 	docker-compose -f ${PWD}/cluster.yml up -d
