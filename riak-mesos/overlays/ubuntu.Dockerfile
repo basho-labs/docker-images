@@ -2,7 +2,7 @@
 FROM mesos_cluster_node
 MAINTAINER Nikolay Khabarov <2xl@mail.ru>
 
-### Environment for marathon.
+### Environment for erlang.
 ENV KERL_DIR=/opt
 ENV KERL_VSN=1.3.2
 ENV ERL_DIR=/opt/erlang
