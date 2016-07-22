@@ -26,3 +26,12 @@ RUN ${KERL_DIR}/kerl-${KERL_VSN}/kerl build ${ERL_VSN} ${ERL_BUILD_VSN}
 RUN mkdir ${ERL_DIR}/${ERL_BUILD_VSN}
 RUN ${KERL_DIR}/kerl-${KERL_VSN}/kerl install ${ERL_BUILD_VSN} ${ERL_DIR}/${ERL_BUILD_VSN}
 RUN echo "export PATH=$PATH:${ERL_DIR}/${ERL_BUILD_VSN}/bin" >> /etc/bash.bashrc
+
+### Copy riak-mesos config.
+RUN mkdir -p /etc/riak-mesos
+COPY config.json /etc/riak-mesos
+
+### Install riak-mesos tool
+RUN apt-get update
+RUN apt-get -y install python-pip
+RUN pip install --upgrade git+https://github.com/basho-labs/riak-mesos-tools.git@riak-mesos-v1.1.x#egg=riak_mesos
