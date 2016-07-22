@@ -6,7 +6,7 @@ function check_servers() {
     RES=1
     SN=$(ifconfig eth0 | sed -En 's/.*inet (addr:)?(([0-9]*\.){2}[0-9]*).*/\2/p')
     for N in `seq 31 39`; do
-        if nc -z "$SN.$N" 53; then
+        if netcat -z "$SN.$N" 53; then
             OLD=$(cat /etc/resolv.conf | grep nameserver)
             echo "nameserver $SN.$N" > /etc/resolv.conf
             echo "$OLD" >> /etc/resolv.conf

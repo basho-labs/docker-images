@@ -32,7 +32,10 @@ COPY mesos-dns-config.json /opt
 COPY mesos-dns-marathon.json /opt
 
 # Install ifconfig and netcat
-RUN yum install -q -y net-tools nc
+RUN yum install -q -y net-tools gcc make
+RUN wget http://sourceforge.net/projects/netcat/files/netcat/0.7.1/netcat-0.7.1.tar.gz
+RUN tar -xzf netcat-0.7.1.tar.gz
+RUN (cd netcat-0.7.1 && ./configure && make && make install)
 
 ### Create symlinks for compatibility
 RUN ln -s /opt/mesosphere/zookeeper /usr/share/zookeeper
