@@ -28,31 +28,35 @@ update-head:
 	git submodule update --init --recursive
 
 .update-head: update-head
+	(cd riak-mesos && make dev)
 	touch .update-head
+
+attach:
+	docker exec -i -t riak_mesos_cluster_marathon /bin/bash
 
 test:
 	@echo Running basic cluster test
 	@echo
 	@echo -n Test zookeepers nodes...
-	@nc -z 172.16.100.11 2181
-	@nc -z 172.16.100.12 2181
-	@nc -z 172.16.100.13 2181
+	@nc -z 172.16.200.11 2181
+	@nc -z 172.16.200.12 2181
+	@nc -z 172.16.200.13 2181
 	@echo ok
 	@echo -n Test mesos master nodes...
-	@curl -f http://172.16.100.21:5050/health
-	@curl -f http://172.16.100.22:5050/health
-	@curl -f http://172.16.100.23:5050/health
+	@curl -f http://172.16.200.21:5050/health
+	@curl -f http://172.16.200.22:5050/health
+	@curl -f http://172.16.200.23:5050/health
 	@echo ok
 	@echo -n Test mesos slave nodes...
-	@curl -f http://172.16.100.31:5051/health
-	@curl -f http://172.16.100.32:5051/health
-	@curl -f http://172.16.100.33:5051/health
+	@curl -f http://172.16.200.31:5051/health
+	@curl -f http://172.16.200.32:5051/health
+	@curl -f http://172.16.200.33:5051/health
 	@echo ok
 	@echo -n Test marathon...
-	@curl -f -s -o /dev/null http://172.16.100.41:8080/ping
+	@curl -f -s -o /dev/null http://172.16.200.41:8080/ping
 	@echo ok
 	@echo -n Test mesos-dns...
-	@docker exec -i -t mesos_cluster_marathon ping -c 1 marathon.mesos > /dev/null
+	@docker exec -i -t riak_mesos_cluster_marathon ping -c 1 marathon.mesos > /dev/null
 	@echo ok
 	@echo
 	@echo Cluster successfully passed tests

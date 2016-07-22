@@ -6,119 +6,119 @@ services:
         container_name: riak_mesos_cluster_zk_1
         environment:
             - NODE_MODE=mesos_zk
-            - MESOS_ZK=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/mesos
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
         networks:
             app_net:
-                ipv4_address: 172.16.100.11
+                ipv4_address: 172.16.200.11
     riak_mesos_cluster_zk_2:
         image: riak_mesos_cluster_node
         container_name: riak_mesos_cluster_zk_2
         environment:
             - NODE_MODE=mesos_zk
-            - MESOS_ZK=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/mesos
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
         networks:
             app_net:
-                ipv4_address: 172.16.100.12
+                ipv4_address: 172.16.200.12
     riak_mesos_cluster_zk_3:
         image: riak_mesos_cluster_node
         container_name: riak_mesos_cluster_zk_3
         environment:
             - NODE_MODE=mesos_zk
-            - MESOS_ZK=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/mesos
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
         networks:
             app_net:
-                ipv4_address: 172.16.100.13
+                ipv4_address: 172.16.200.13
     riak_mesos_cluster_master_1:
         image: riak_mesos_cluster_node
         environment:
             - NODE_MODE=mesos_master
-            - MESOS_IP=172.16.100.21
-            - MESOS_HOSTNAME=172.16.100.21
+            - MESOS_IP=172.16.200.21
+            - MESOS_HOSTNAME=172.16.200.21
             - MESOS_QUORUM=2
-            - MESOS_ZK=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/mesos
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
         container_name: riak_mesos_cluster_master_1
         networks:
             app_net:
-                ipv4_address: 172.16.100.21
+                ipv4_address: 172.16.200.21
     riak_mesos_cluster_master_2:
         image: riak_mesos_cluster_node
         environment:
             - NODE_MODE=mesos_master
-            - MESOS_IP=172.16.100.22
-            - MESOS_HOSTNAME=172.16.100.22
+            - MESOS_IP=172.16.200.22
+            - MESOS_HOSTNAME=172.16.200.22
             - MESOS_QUORUM=2
-            - MESOS_ZK=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/mesos
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
         container_name: riak_mesos_cluster_master_2
         networks:
             app_net:
-                ipv4_address: 172.16.100.22
+                ipv4_address: 172.16.200.22
     riak_mesos_cluster_master_3:
         image: riak_mesos_cluster_node
         environment:
             - NODE_MODE=mesos_master
-            - MESOS_IP=172.16.100.23
-            - MESOS_HOSTNAME=172.16.100.23
+            - MESOS_IP=172.16.200.23
+            - MESOS_HOSTNAME=172.16.200.23
             - MESOS_QUORUM=2
-            - MESOS_ZK=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/mesos
+            - MESOS_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
         container_name: riak_mesos_cluster_master_3
         networks:
             app_net:
-                ipv4_address: 172.16.100.23
+                ipv4_address: 172.16.200.23
     riak_mesos_cluster_slave_1:
         image: riak_mesos_cluster_node
         environment:
             - NODE_MODE=mesos_slave
-            - MESOS_IP=172.16.100.31
-            - MESOS_HOSTNAME=172.16.100.31
-            - MESOS_MASTER=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/mesos
+            - MESOS_IP=172.16.200.31
+            - MESOS_HOSTNAME=172.16.200.31
+            - MESOS_MASTER=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
             - MESOS_FRAMEWORKS_HOME=/opt/mesos/frameworks_home
         container_name: riak_mesos_cluster_slave_1
         volumes:
             - /sys/fs/cgroup:/sys/fs/cgroup
-            - ./riak-mesos:/opt/riak-mesos
+            - ../:/opt/docker-images
         networks:
             app_net:
-                ipv4_address: 172.16.100.31
+                ipv4_address: 172.16.200.31
     riak_mesos_cluster_slave_2:
         image: riak_mesos_cluster_node
         environment:
             - NODE_MODE=mesos_slave
-            - MESOS_IP=172.16.100.32
-            - MESOS_HOSTNAME=172.16.100.32
-            - MESOS_MASTER=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/mesos
+            - MESOS_IP=172.16.200.32
+            - MESOS_HOSTNAME=172.16.200.32
+            - MESOS_MASTER=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
             - MESOS_FRAMEWORKS_HOME=/opt/mesos/frameworks_home
         container_name: riak_mesos_cluster_slave_2
         volumes:
             - /sys/fs/cgroup:/sys/fs/cgroup
-            - ./riak-mesos:/opt/riak-mesos
+            - ../:/opt/docker-images
         networks:
             app_net:
-                ipv4_address: 172.16.100.32
+                ipv4_address: 172.16.200.32
     riak_mesos_cluster_slave_3:
         image: riak_mesos_cluster_node
         environment:
             - NODE_MODE=mesos_slave
-            - MESOS_IP=172.16.100.33
-            - MESOS_HOSTNAME=172.16.100.33
-            - MESOS_MASTER=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/mesos
+            - MESOS_IP=172.16.200.33
+            - MESOS_HOSTNAME=172.16.200.33
+            - MESOS_MASTER=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
             - MESOS_FRAMEWORKS_HOME=/opt/mesos/frameworks_home
         container_name: riak_mesos_cluster_slave_3
         volumes:
             - /sys/fs/cgroup:/sys/fs/cgroup
-            - ./riak-mesos:/opt/riak-mesos
+            - ../:/opt/docker-images
         networks:
             app_net:
-                ipv4_address: 172.16.100.33
+                ipv4_address: 172.16.200.33
     riak_mesos_cluster_marathon:
         image: riak_mesos_cluster_node
         environment:
             - NODE_MODE=mesos_marathon
-            - MARATHON_ZK=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/marathon
-            - MARATHON_MASTER=zk://172.16.100.11:2181,172.16.100.12:2181,172.16.100.13:2181/mesos
+            - MARATHON_ZK=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/marathon
+            - MARATHON_MASTER=zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos
         container_name: riak_mesos_cluster_marathon
         networks:
             app_net:
-                ipv4_address: 172.16.100.41
+                ipv4_address: 172.16.200.41
 
 networks:
     app_net:
@@ -126,5 +126,5 @@ networks:
         ipam:
             driver: default
             config:
-                - subnet: 172.16.100.0/24
-                  gateway: 172.16.100.1
+                - subnet: 172.16.200.0/24
+                  gateway: 172.16.200.1
