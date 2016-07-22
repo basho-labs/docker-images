@@ -1,0 +1,46 @@
+{
+    "riak": {
+        "framework-name": "riak",
+        "hostname": "riak.marathon.mesos",
+        "marathon": "marathon.mesos:8080",
+        "master": "172.16.200.21:5050,172.16.200.22:5050,172.16.200.23:5050",
+        "zk": "zk://172.16.200.11:2181,172.16.200.12:2181,172.16.200.13:2181/mesos",
+        "user": "root",
+        "role": "riak",
+        "auth-principal": "riak",
+        "auth-provider": "",
+        "auth-secret-file": "",
+        "instances": 1,
+        "failover-timeout": 10000.0,
+        "healthcheck-grace-period-seconds": 300,
+        "healthcheck-interval-seconds": 60,
+        "healthcheck-timeout-seconds": 20,
+        "healthcheck-max-consecutive-failures": 5,
+        "constraints": [],
+        "scheduler": {
+            "url": "/opt/docker-images/riak-mesos/riak-mesos/framework/riak-mesos-scheduler/packages/riak_mesos_scheduler-1.1.1-mesos-0.28.1-ubuntu-14.04.tar.gz",
+            "cpus": 0.2,
+            "mem": 512.0,
+            "constraints": []
+        },
+        "executor": {
+            "url": "/opt/docker-images/riak-mesos/riak-mesos/framework/riak-mesos-executor/packages/riak_mesos_executor-1.2.0-mesos-0.28.1-ubuntu-14.04.tar.gz",
+            "cpus": 0.1,
+            "mem": 512.0
+        },
+        "node": {
+            "url": "/opt/docker-images/riak-mesos/riak-mesos/riak/packages/riak_ts-1.3.1-ubuntu-14.04.tar.gz",
+            "patches-url": "/opt/docker-images/riak-mesos/riak-mesos/framework/riak-mesos-executor/packages/riak_erlpmd_patches-1.2.0-mesos-0.28.1-ubuntu-14.04.tar.gz",
+            "explorer-url": "/opt/docker-images/riak-mesos/riak-mesos/framework/riak_explorer/packages/riak_explorer-1.1.1.patch-ubuntu-14.04.tar.gz",
+            "cpus": 0.1,
+            "mem": 256.0,
+            "disk": 200.0
+        },
+        "director": {
+            "url": "/opt/docker-images/riak-mesos/riak-mesos/framework/riak-mesos-director/packages/riak_mesos_director-1.0.1-ubuntu-14.04.tar.gz",
+            "use-public": false,
+            "cpus": 0.5,
+            "mem": 256.0
+        }
+    }
+}
