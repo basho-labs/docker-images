@@ -1,110 +1,80 @@
-BUILTIN_OVERLAYS := ubuntu/build-essential ubuntu/java8 ubuntu/mesos ubuntu/sbt ubuntu/spark alpine/base alpine/java
-# Global verbosity settings
-V ?= 0
+WORKDIR 							= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+DOCKERMK 						 ?= $(WORKDIR)dockermk
 
-verbose_0 = @
-verbose_2 = set -x;
-verbose = $(verbose_$(V))
-
-# BUILD verbosity settings
-build_verbose_0 = @echo " BUILD   " $(TAG);
-build_verbose_2 = set -x;
-build_verbose = $(build_verbose_$(V))
-
-# OVERLAY verbosity settings
-overlay_verbose_0 = @echo " OVERLAY " $(OVERLAYS);
-overlay_verbose_2 = set -x;
-overlay_verbose = $(overlay_verbose_$(V))
 # Core options for docker.mk
-TAG                  ?= $(notdir $(realpath $(lastword $(MAKEFILE_LIST))))
-LABEL                ?=
-FROM                 ?= ubuntu
+TAG                  ?= $(shell basename $(WORKDIR))
+FROM                 ?= alpine
 MAINTAINER           ?=
 ENTRYPOINT           ?=
+CMD				           ?=
 
+# Options to influence Docker
 DOCKERFILE           ?= Dockerfile
 DOCKER_BUILD_OPTS    ?=
 DOCKER_RUN_OPTS      ?= --rm -it
 DOCKER_PUSH_OPTS     ?=
 DOCKER_TEST_OPTS     ?=
 
-OVERLAYS_DIR         ?= overlays
+# Default overlay search dirs
+OVERLAY_DIRS 				 ?= . overlays
 OVERLAYS             ?=
-IGNORE_OVERLAYS      ?=
+OVERLAY_FILES 				= $(shell $(DOCKERMK) -o -w $(realpath .) -d $(shell echo $(OVERLAY_DIRS) | tr ' ' :) $(OVERLAYS))
 
-OVERLAY_FILES        := $(patsubst %,$(OVERLAYS_DIR)/%.Dockerfile,$(filter-out $(IGNORE_OVERLAYS),$(OVERLAYS)))
+# Options to add standard lines to the Dockerfile
+DOCKERMK_OPTS 			 ?=
+ifdef MAINTAINER
+DOCKERMK_OPTS 			 += -maintainer '$(MAINTAINER)'
+endif
+ifdef ENTRYPOINT
+DOCKERMK_OPTS 			 += -entrypoint '$(ENTRYPOINT)'
+endif
+ifdef CMD
+DOCKERMK_OPTS 			 += -cmd '$(CMD)'
+endif
 
-IGNORE_TESTS         ?=
-TEST_DIR             ?= test
-TEST_TARGET          ?= test
-TEST_CLEAN_TARGET    ?= test-clean
+# Test harness
+TESTS 							 ?= $(shell ls test/*.mk 2>/dev/null)
 
-TEST_FILES           := $(filter-out $(IGNORE_TESTS),$(wildcard $(TEST_DIR)/*.mk))
-# Overlays are snippets of Dockerfiles that can be parameterized and overridden
+.PHONY = all install distclean clean testclean test
 
-$(OVERLAYS_DIR)/docker.mk:
-	[ ! -d "$(OVERLAYS_DIR)/docker.mk" ] && git clone https://github.com/jbrisbin/docker.mk.git $(OVERLAYS_DIR)/docker.mk
+all:: install
 
-$(patsubst %,$(OVERLAYS_DIR)/docker.mk/%.Dockerfile,$(BUILTIN_OVERLAYS)): $(OVERLAYS_DIR)/docker.mk
-	$(verbose) echo "Downloaded built-in overlays"
+install:: $(DOCKERFILE)
+	docker build -t $(TAG) -f $(DOCKERFILE) $(DOCKER_BUILD_OPTS) .
 
-define source_overlay
-awk '/^#:mk[ ]/ {print "$$(eval " substr($$0, 6) ")"}' $(1);
-endef
-
-define add_overlay
-awk '!/^#:mk[ ]/ {print $$0}' $(1) | sed "s#\$$CURDIR/#$(dir $(realpath $(1)))#g" | sed "s#$(CURDIR)/##g" >>$(DOCKERFILE);
-endef
-
-.PHONY = all clean install push test
-
-all: install
+distclean:: clean
+	@CONTAINERS=`docker ps -aqf ancestor=$(TAG) | tr '\n' ' '`; \
+	if [ -n "$$CONTAINERS" ]; then \
+		echo "CLEAN $$CONTAINERS"; \
+		docker rm -f $$CONTAINERS >/dev/null; \
+	fi
+	docker rmi $(TAG)
 
 clean::
 	rm -f $(DOCKERFILE)
-	rm -Rf $(OVERLAYS_DIR)/docker.mk
 
-install:: $(DOCKERFILE)
-	docker build -t $(TAG) $(DOCKER_BUILD_OPTS) -f $(DOCKERFILE) $(CURDIR)
+testclean::
+	@for t in "$(TESTS)"; do \
+		$(MAKE) -C test -f `basename $$t` distclean; \
+	done
 
-run:: $(DOCKERFILE)
-	docker run $(DOCKER_RUN_OPTS) $(TAG)
-
-push::
-	docker push $(DOCKER_PUSH_OPTS) $(TAG)
-
-test:: install
-	docker run -e TEST=true $(DOCKER_TEST_OPTS) $(TAG)
-
-$(OVERLAYS_DIR):
-	$(verbose)
-
-$(DOCKERFILE): $(OVERLAYS_DIR) $(OVERLAY_FILES)
-	$(foreach overlay,$(OVERLAY_FILES), $(eval $(shell $(call source_overlay,$(overlay)))))
-	$(build_verbose) echo FROM $(FROM) >$(DOCKERFILE)
-ifneq (,$(strip $(MAINTAINER)))
-	$(verbose) echo MAINTAINER "$(MAINTAINER)" >>$(DOCKERFILE)
-endif
-ifneq (,$(strip $(LABEL)))
-	$(verbose) echo LABEL $(LABEL) >>$(DOCKERFILE)
-endif
-	$(overlay_verbose) $(foreach overlay,$(OVERLAY_FILES), $(call add_overlay,$(overlay)))
-ifneq (,$(strip $(ENTRYPOINT)))
-	$(verbose) echo ENTRYPOINT $(ENTRYPOINT) >>$(DOCKERFILE)
-endif
-# If a test dir exists, assume we want to run tests
-ifeq ($(wildcard test),)
 test::
-	$(verbose) :
-test-clean::
-	$(verbose) :
-else
-test::
-	# Filter out ignored tests and run the TEST_TARGET
-	$(foreach testmk,$(TEST_FILES), $(MAKE) -C $(TEST_DIR) -f $(shell basename $(testmk)) $(TEST_TARGET))
+	@for t in "$(TESTS)"; do \
+		TEST_TARGETS=`egrep -o 'test-.*:' $$t | tr '\n' ' ' | tr -d :`; \
+		echo "TEST $$t: $$TEST_TARGETS"; \
+		$(MAKE) -C test -f `basename $$t` $$TEST_TARGETS; \
+	done
 
-test-clean::
-	echo test-clean
-	# Clean up the container we created for the tests
-	$(foreach container,$(shell docker ps -a | grep $(TAG) | awk '{print $1}'), $(shell docker rm -f $(container)))
-endif
+$(DOCKERFILE):: $(DOCKERMK) $(OVERLAY_FILES)
+	$(DOCKERMK) \
+	-w $(realpath .) \
+	-f $(DOCKERFILE) \
+	-d $(shell echo $(OVERLAY_DIRS) | tr ' ' :) \
+	-from $(FROM) \
+	$(DOCKERMK_OPTS) \
+	$(OVERLAYS)
+
+$(DOCKERMK):
+	@echo "Downloading dockermk utility from GitHub..."
+	curl -sL -o $(DOCKERMK) https://github.com/jbrisbin/docker.mk/releases/download/0.1.0/dockermk-`uname -s`
+	@chmod a+x $(DOCKERMK)
