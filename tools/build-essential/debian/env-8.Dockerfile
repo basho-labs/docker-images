@@ -1,0 +1,7 @@
+ENV \
+  DEBIAN_FRONTEND=noninteractive \
+  DEBCONF_NONINTERACTIVE_SEEN=true
+ENV \
+  OS_FAMILY=debian \
+  OS_VERSION=8 \
+  OS_FLAVOR=jessie

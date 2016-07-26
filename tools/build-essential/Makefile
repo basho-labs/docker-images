@@ -6,9 +6,9 @@ JAVA 				 ?= y
 FROM 				 ?= ubuntu:14.04
 MAINTAINER 		= Jon Brisbin <jbrisbin@basho.com>
 
-OS_FAMILY 		= $(shell echo "$(FROM)" | cut -d: -f1;)
-OS_VERSION 		= $(shell echo "$(FROM)" | cut -d: -f2;)
-OS_TAG 				= $(shell echo "$(FROM)" | sed 's/:/-/g';)
+OS_FAMILY 		= $(shell echo "$(FROM)" | cut -d: -f1)
+OS_VERSION 		= $(shell echo "$(FROM)" | cut -d: -f2)
+OS_TAG 				= $(shell echo "$(FROM)" | tr : -)
 
 TAG 					= basho/build-essential:$(OS_TAG)
 
