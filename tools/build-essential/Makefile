@@ -1,31 +1,31 @@
-UPGRADE			 ?= y
-DOCKER 			 ?= y
-FPM	  			 ?= y
-JAVA 				 ?= y
+UPGRADE       ?= y
+DOCKER        ?= y
+FPM           ?= y
+JAVA          ?= y
 
-FROM 				 ?= ubuntu:14.04
-MAINTAINER 		= Jon Brisbin <jbrisbin@basho.com>
+FROM          ?= ubuntu:14.04
+MAINTAINER     = Jon Brisbin <jbrisbin@basho.com>
 
-OS_FAMILY 		= $(shell echo "$(FROM)" | cut -d: -f1)
-OS_VERSION 		= $(shell echo "$(FROM)" | cut -d: -f2)
-OS_TAG 				= $(shell echo "$(FROM)" | tr : -)
+OS_FAMILY      = $(shell echo "$(FROM)" | cut -d: -f1)
+OS_VERSION     = $(shell echo "$(FROM)" | cut -d: -f2)
+OS_TAG         = $(shell echo "$(FROM)" | tr : -)
 
-TAG 					= basho/build-essential:$(OS_TAG)
+TAG            = basho/build-essential:$(OS_TAG)
 
-OVERLAY_DIRS 	= $(OS_FAMILY) .
-OVERLAYS 			= env env-$(OS_VERSION) build-base build-base-py git-ssh
+OVERLAY_DIRS   = $(OS_FAMILY) .
+OVERLAYS       = env env-$(OS_VERSION) build-base build-base-py git-ssh
 
 ifeq (y,$(UPGRADE))
-OVERLAYS 		 += upgrade
+OVERLAYS      += upgrade
 endif
 ifeq (y,$(DOCKER))
-OVERLAYS 		 += docker
+OVERLAYS      += docker
 endif
 ifeq (y,$(FPM))
-OVERLAYS 		 += fpm
+OVERLAYS      += fpm
 endif
 ifeq (y,$(JAVA))
-OVERLAYS 		 += jdk-8 maven sbt
+OVERLAYS      += jdk-8 maven sbt
 endif
 
 -include ../../docker.mk
