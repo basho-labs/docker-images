@@ -25,7 +25,7 @@ ifeq (y,$(FPM))
 OVERLAYS 		 += fpm
 endif
 ifeq (y,$(JAVA))
-OVERLAYS 		 += jdk-8 maven #sbt
+OVERLAYS 		 += jdk-8 maven sbt
 endif
 
 -include ../../docker.mk
