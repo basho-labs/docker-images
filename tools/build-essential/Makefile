@@ -14,10 +14,10 @@ OS_TAG         = $(shell echo "$(FROM)" | tr : -)
 TAG            = basho/build-essential:$(OS_TAG)
 
 OVERLAY_DIRS   = $(OS_FAMILY) .
-OVERLAYS       = env env-$(OS_VERSION) git-ssh
+OVERLAYS       = env env-$(OS_VERSION)
 
 ifeq (y,$(BUILD_BASE))
-OVERLAYS      += build-base build-base-py
+OVERLAYS      += build-base build-base-py git-ssh
 endif
 ifeq (y,$(DOCKER))
 OVERLAYS      += docker
