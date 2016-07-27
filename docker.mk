@@ -37,8 +37,6 @@ TESTS 							 ?= $(shell ls test/*.mk 2>/dev/null)
 
 .PHONY = all install distclean clean testclean test
 
-all:: install
-
 install:: $(DOCKERFILE)
 	docker build -t $(TAG) -f $(DOCKERFILE) $(DOCKER_BUILD_OPTS) .
 
