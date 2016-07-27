@@ -33,8 +33,3 @@ OVERLAYS      += upgrade
 endif
 
 -include ../../docker.mk
-
-all:
-  @for os in ubuntu:14.04 ubuntu:15.10 ubuntu:16.04 debian:8 centos:7; do \
-    FROM=$$os $(MAKE) clean install; \
-  done
