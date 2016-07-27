@@ -1,4 +1,3 @@
-
 # Install Spark
 ARG SPARK_HOME=/usr/lib/spark
 ARG SPARK_VERSION=1.6.1
@@ -11,6 +10,6 @@ ENV \
   SPARK_HOME=$SPARK_HOME \
   PATH=$SPARK_HOME/bin:$PATH \
   MASTER=local[*] \
-  SPARK_SUBMIT_OPTIONS="--driver-memory 512M --executor-memory 1G --deploy-mode client --conf spark.mesos.executor.docker.image=basho/spark"
+  SPARK_SUBMIT_OPTIONS="--driver-memory 512M --executor-memory 2G --conf spark.mesos.executor.docker.image=basho/spark"
 
 CMD ["bash", "-i"]

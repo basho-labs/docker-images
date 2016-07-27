@@ -1,0 +1,28 @@
+{
+  "id": "/artifactory",
+  "cpus": 1,
+  "mem": 8192,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "jfrog-docker-reg2.bintray.io/jfrog/artifactory-oss",
+      "network": "BRIDGE",
+      "portMappings": [
+        { "containerPort": 8081, "hostPort": 0, "protocol": "tcp" }
+      ]
+    }
+  },
+  "healthChecks": [
+    {
+      "path": "/",
+      "portIndex": 0,
+      "protocol": "HTTP",
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 300,
+      "timeoutSeconds": 300,
+      "maxConsecutiveFailures": 25,
+      "ignoreHttp1xx": false
+    }
+  ]
+}

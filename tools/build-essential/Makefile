@@ -1,3 +1,4 @@
+BUILD_BASE    ?= y
 UPGRADE       ?= y
 DOCKER        ?= y
 FPM           ?= y
@@ -13,10 +14,10 @@ OS_TAG         = $(shell echo "$(FROM)" | tr : -)
 TAG            = basho/build-essential:$(OS_TAG)
 
 OVERLAY_DIRS   = $(OS_FAMILY) .
-OVERLAYS       = env env-$(OS_VERSION) build-base build-base-py git-ssh
+OVERLAYS       = env env-$(OS_VERSION) git-ssh
 
-ifeq (y,$(UPGRADE))
-OVERLAYS      += upgrade
+ifeq (y,$(BUILD_BASE))
+OVERLAYS      += build-base build-base-py
 endif
 ifeq (y,$(DOCKER))
 OVERLAYS      += docker
@@ -27,5 +28,13 @@ endif
 ifeq (y,$(JAVA))
 OVERLAYS      += jdk-8 maven sbt
 endif
+ifeq (y,$(UPGRADE))
+OVERLAYS      += upgrade
+endif
 
 -include ../../docker.mk
+
+all:
+  @for os in ubuntu:14.04 ubuntu:15.10 ubuntu:16.04 debian:8 centos:7; do \
+    FROM=$$os $(MAKE) clean install; \
+  done

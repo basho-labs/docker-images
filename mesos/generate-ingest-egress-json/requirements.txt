@@ -1,3 +1,0 @@
-requests
-Jinja2
-click

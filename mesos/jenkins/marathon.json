@@ -25,7 +25,7 @@
   },
   "healthChecks": [
     {
-      "path": "/",
+      "path": "/jenkins/",
       "portIndex": 0,
       "protocol": "HTTP",
       "gracePeriodSeconds": 300,
@@ -37,7 +37,7 @@
   ],
   "user": "jenkins",
   "env": {
-    "JENKINS_CONFIG_REPO": "",
+    "JENKINS_CONFIG_REPO": "jbrisbin/jenkins-mesos-softlayer",
     "JENKINS_OPTS": "--prefix=/jenkins"
   },
   "uris": [
