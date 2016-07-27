@@ -26,7 +26,7 @@ ifeq (y,$(FPM))
 OVERLAYS      += fpm
 endif
 ifeq (y,$(JAVA))
-OVERLAYS      += jdk-8 maven sbt
+OVERLAYS      += openjdk-8 maven sbt
 endif
 ifeq (y,$(UPGRADE))
 OVERLAYS      += upgrade
