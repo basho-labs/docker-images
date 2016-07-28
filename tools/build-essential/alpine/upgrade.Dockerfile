@@ -1,0 +1,1 @@
+RUN apk upgrade

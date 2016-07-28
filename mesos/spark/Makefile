@@ -1,9 +1,9 @@
-FROM = ubuntu:14.04
-MAINTAINER = Jon Brisbin <jbrisbin@basho.com>
-TAG ?= basho/spark
+TARGET_OS         ?= ubuntu-14.04
 
-DOCKER_BUILD_OPTS += --build-arg=MESOS_VERSION=0.26.0-0.2.145.ubuntu1404
+TAG               ?= basho/spark:$(TARGET_OS)
+FROM               = basho/build-essential-mesos:$(TARGET_OS)
+MAINTAINER         = Jon Brisbin <jbrisbin@basho.com>
 
-OVERLAYS = base jdk-8 mesos spark
+OVERLAYS = spark
 
 -include ../../docker.mk

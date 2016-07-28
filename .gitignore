@@ -1,1 +1,6 @@
 .DS_Store
+dockermk
+mesos/build-essential/Dockerfile
+mesos/spark/Dockerfile
+tools/build-essential/Dockerfile
+tools/erlang/Dockerfile
