@@ -7,6 +7,6 @@ CMD = ["/tmp/greeting.sh"]
 
 test-escript: clean install
 	GREETING=`docker run --rm -i $(TAG)`; \
-	[[ "hello world" == "$$GREETING" ]]
+	[ "hello world" = "$$GREETING" ]
 
 -include ../../../docker.mk
