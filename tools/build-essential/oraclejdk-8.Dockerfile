@@ -1,12 +1,11 @@
 ENV JAVA_VERSION=8 \
     JAVA_UPDATE=102 \
     JAVA_BUILD=14 \
-    JAVA_HOME="/usr/lib/jvm/default-jvm"
+    JAVA_HOME="/usr/lib/jvm/oraclejdk-${JAVA_VERSION}"
 
-RUN mkdir -p "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" && \
+RUN mkdir -p "$JAVA_HOME" && \
     curl -sSL -H "Cookie: oraclelicense=accept-securebackup-cookie;" \
-        "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" | tar -xzf - -C "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" --strip-components=1 && \
-    ln -s "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" "$JAVA_HOME" && \
+        "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" | tar -xzf - -C "$JAVA_HOME" --strip-components=1 && \
     ln -s "$JAVA_HOME/bin/"* "/usr/bin/" && \
     rm -rf "$JAVA_HOME/"*src.zip && \
     rm -rf "$JAVA_HOME/lib/missioncontrol" \
@@ -41,4 +40,4 @@ RUN mkdir -p "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" && \
            "$JAVA_HOME/jre/lib/ext/nashorn.jar" \
            "$JAVA_HOME/jre/lib/jfr.jar" \
            "$JAVA_HOME/jre/lib/jfr" \
-           "$JAVA_HOME/jre/lib/oblique-fonts" 
+           "$JAVA_HOME/jre/lib/oblique-fonts"
