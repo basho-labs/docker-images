@@ -22,3 +22,7 @@ that will build base image based on centos and start cluster. Default OS is ubun
 # Web interfaces
 http://172.16.200.21:5050 - mesos master
 http://172.16.100.41:8080 - marathon
+
+#riak-mesos util usage
+see https://github.com/basho-labs/riak-mesos-tools#usage
+Util is preinstall and preconfigured on each nodes.
