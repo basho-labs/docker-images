@@ -18,6 +18,7 @@ RUN cd ${KERL_DIR} && tar zxf ${KERL_VSN}.tar.gz -C ${KERL_DIR} && rm ${KERL_VSN
 RUN cd ${KERL_DIR}/kerl-${KERL_VSN} && chmod +x kerl
 
 ### Install erlang.
+ENV CFLAGS="-DOPENSSL_NO_EC=1"
 RUN mkdir -p $ERL_DIR
 RUN ${KERL_DIR}/kerl-${KERL_VSN}/kerl build ${ERL_VSN} ${ERL_BUILD_VSN}
 RUN mkdir ${ERL_DIR}/${ERL_BUILD_VSN}
