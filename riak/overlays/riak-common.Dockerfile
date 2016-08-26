@@ -1,6 +1,6 @@
 
 # Install Riak Explorer
-RUN curl -sSL https://github.com/basho-labs/riak_explorer/releases/download/1.1.0/riak_explorer-1.1.0.patch-ubuntu-14.04.tar.gz | tar -zxf - -C /usr/lib/riak --strip-components 2
+RUN curl -sSL https://github.com/basho-labs/riak_explorer/releases/download/1.2.1/riak_explorer-1.2.1.patch-ubuntu-14.04.tar.gz | tar -zxf - -C /usr/lib/riak --strip-components 2
 
 # Install the Python client
 RUN \
