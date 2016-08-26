@@ -26,4 +26,3 @@ RUN chmod a+x /usr/lib/riak/riak-cluster.sh
 RUN mkdir -p /etc/riak/schemas
 
 WORKDIR /var/lib/riak
-CMD ["/usr/lib/riak/riak-cluster.sh"]
