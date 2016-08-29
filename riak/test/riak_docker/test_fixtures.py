@@ -19,26 +19,26 @@ class RiakCluster:
   Start a Riak cluster
   """
   def start(self):
-    with open('docker-compose.yml', 'w') as yaml:
+    with open(self.name + '.yml', 'w') as yaml:
       yaml.write(self.tpl.render(image=self.name,
                                  schemas_dir="%s/schemas" % os.getcwd()))
 
-    subprocess.call(['docker-compose', 'up', '-d', 'coordinator'])
+    subprocess.call(['docker-compose', '-f', self.name + '.yml', 'up', '-d', 'coordinator'])
     self.wait()
 
   """
   Stop a Riak cluster
   """
   def stop(self):
-    subprocess.call(['docker-compose', 'down'])
-    subprocess.call(['rm', '-f', 'docker-compose.yml'])
+    subprocess.call(['docker-compose', '-f', self.name + '.yml', 'down'])
+    subprocess.call(['rm', '-f', self.name + '.yml'])
 
   """
   Get the IP addresses of the nodes in the Riak cluster managed by this instance
   """
   def ips(self):
     info = self.inspect()
-    return [ i['NetworkSettings']['Networks']['riak']['IPAddress'] for i in info ]
+    return [ i['NetworkSettings']['Networks'][0]['IPAddress'] for i in info ]
 
   """
   Get the Docker info for all the containers managed by this instance

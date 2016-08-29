@@ -28,8 +28,3 @@ services:
 
 volumes:
   schemas: {}
-
-networks:
-  default:
-    external:
-      name: riak

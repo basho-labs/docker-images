@@ -1,6 +1,5 @@
 __pycache__
 .cache
 *.pyc
-docker-compose.yml
 test-report.xml
-.container
+docker-compose.yml

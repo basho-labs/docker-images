@@ -2,6 +2,7 @@ version: "2"
 services:
   coordinator:
     image: {{ image }}
+    tty: true
     ports:
       - "8087"
       - "8098"
@@ -13,6 +14,7 @@ services:
       - {{ schemas_dir }}:/etc/riak/schemas
   member:
     image: {{ image }}
+    tty: true
     ports:
       - "8087"
       - "8098"
@@ -28,8 +30,3 @@ services:
 
 volumes:
   schemas: {}
-
-networks:
-  default:
-    external:
-      name: riak
