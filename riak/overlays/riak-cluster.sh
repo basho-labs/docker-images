@@ -2,6 +2,7 @@
 
 RIAK=/usr/sbin/riak
 RIAK_CONF=/etc/riak/riak.conf
+RIAK_ADVANCED_CONF=/etc/riak/advanced.config
 RIAK_ADMIN=/usr/sbin/riak-admin
 SCHEMAS_DIR=/etc/riak/schemas/
 
@@ -14,6 +15,32 @@ sed -i -r "s#nodename = (.*)#nodename = riak@$HOST#g" $RIAK_CONF
 sed -i -r "s#distributed_cookie = (.*)#distributed_cookie = $CLUSTER_NAME#g" $RIAK_CONF
 sed -i -r "s#listener\.protobuf\.internal = (.*)#listener.protobuf.internal = $HOST:8087#g" $RIAK_CONF
 sed -i -r "s#listener\.http\.internal = (.*)#listener.http.internal = $HOST:8098#g" $RIAK_CONF
+
+riak_test_rapid_ready () {
+    # only make riak cluster convergence rapid if the cluster is being used for
+    # testing. otherwise, cluster communications will have a more dominant share
+    # of the overall CPU and Net I/O than they should.
+    if echo $RIAK_MODE |grep "test" >/dev/null 2>&1; then
+        # set riak_conf vnode_parallel_start, forced_ownership_handoff, and
+        # handoff_concurrency to the ring_size.
+        local ring_size=$(awk -F'=' '/ring_size/{print $2}' $RIAK_CONF |sed 's/[ ]//')
+        local handoff_concurrency=$ring_size
+        local forced_ownership_handoff=$ring_size
+        local handoff_concurrency=$ring_size
+        local sed_riak_core_section="""
+/^[ ]*{riak_core,/,/^[ ]*\]}/ {
+    s/^[ ]*{.*}[^}]*[^,]/&,/
+    s/^[ ]*\]/ \
+    {vnode_parallel_start, $vnode_parallel_start}, \
+    {forced_ownership_handoff, $forced_ownership_handoff}, \
+    {handoff_concurrency, $handoff_concurrency} \
+]/
+}
+"""
+        sed -i "$sed_riak_core_section" $RIAK_ADVANCED_CONF
+    fi
+}
+riak_test_rapid_ready
 
 $RIAK start
 $RIAK_ADMIN wait-for-service riak_kv
