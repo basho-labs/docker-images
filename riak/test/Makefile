@@ -1,9 +1,19 @@
+CONTAINER ?= tests
+DOCKER_RUN = docker run --name=$(CONTAINER) --net=riak -it -v /var/run/docker.sock:/var/run/docker.sock -v $(shell realpath ..):/usr/src
+PYTEST_ARGS ?=
 
-.PHONY: test clean
+.PHONY: build test clean
 
-test:
-	docker-compose -f pytests.yml up --remove-orphans
+build: Dockerfile
+	docker build -t $(CONTAINER) .
+	@[ "$(shell docker network inspect -f '{{.Id}}' riak)" != "" ] || docker network create riak
+
+test: build
+	$(DOCKER_RUN) $(CONTAINER) $(PYTEST_ARGS)
+
+shell: build
+	$(DOCKER_RUN) --entrypoint=sh $(CONTAINER)
 
 clean:
-	rm -Rf .cache __pycache__ riak_docker/*.pyc *.pyc docker-compose.yml
-	docker-compose -f pytests.yml down
+	rm -Rf .cache __pycache__ riak_docker/__pycache__ riak_docker/*.pyc *.pyc
+	@[ "$(shell docker ps -q -a -f ancestor=$(CONTAINER))" == "" ] || docker rm -f $(CONTAINER)

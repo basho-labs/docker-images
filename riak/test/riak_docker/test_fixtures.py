@@ -1,50 +1,49 @@
-import jinja2
 import json
 import os
 import pytest
 import subprocess
 import sys
+from riak import RiakClient, RiakNode
 
 """
 This class encapsulates a set of interactions that launches a Riak cluster and allows it to be scaled to an arbitrary number of nodes. Access to the IP addresses which the containers are exposed under is availabe via the RiakCluster.ips() function.
 """
 class RiakCluster:
 
-  def __init__(self, name):
-    self.name = name
-    self.env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-    self.tpl = self.env.get_template('docker-compose.yml.tpl')
+  def __init__(self, flavor):
+    self.flavor = flavor
+    self.base_args = ['docker-compose', '-f', "/usr/src/%s.yml" % self.flavor, '-p', self.flavor]
 
   """
   Start a Riak cluster
   """
   def start(self):
-    with open(self.name + '.yml', 'w') as yaml:
-      yaml.write(self.tpl.render(image=self.name,
-                                 schemas_dir="%s/schemas" % os.getcwd()))
-
-    subprocess.call(['docker-compose', '-f', self.name + '.yml', 'up', '-d', 'coordinator'])
+    args = self.base_args + ['up', '-d', 'coordinator']
+    #print "start: %s" % args
+    subprocess.check_call(args)
     self.wait()
 
   """
   Stop a Riak cluster
   """
   def stop(self):
-    subprocess.call(['docker-compose', '-f', self.name + '.yml', 'down'])
-    subprocess.call(['rm', '-f', self.name + '.yml'])
+    args = self.base_args + ['down']
+    #print "stop: %s" % args
+    subprocess.check_call(args)
 
   """
   Get the IP addresses of the nodes in the Riak cluster managed by this instance
   """
   def ips(self):
     info = self.inspect()
-    return [ i['NetworkSettings']['Networks'][0]['IPAddress'] for i in info ]
+    ips = [ (i['NetworkSettings']['Networks']).values()[0]['IPAddress'] for i in info ]
+    return ips
 
   """
   Get the Docker info for all the containers managed by this instance
   """
   def inspect(self):
-    ids = subprocess.check_output(['docker', 'ps', '-q', '-f', "label=com.basho.riak.cluster.name=%s" % os.environ['HOSTNAME']]).strip().split('\n')
+    ids = subprocess.check_output(['docker', 'ps', '-q', '-f', "label=com.basho.riak.cluster.name=%s" % self.flavor]).strip().split('\n')
 
     info = []
     for id in ids:
@@ -57,7 +56,8 @@ class RiakCluster:
   Scale a Riak cluster to a given number of nodes
   """
   def scale(self, nodes):
-    subprocess.call(['docker-compose', 'scale', "member=%i" % (nodes-1)])
+    args = self.base_args + ['scale', "member=%i" % (nodes-1)]
+    subprocess.check_call(args)
     self.wait()
 
   """
@@ -66,9 +66,17 @@ class RiakCluster:
   def wait(self):
     # Wait for all nodes to settle
     for i in self.inspect():
-      subprocess.call(['docker', 'exec', i['Id'], 'riak-admin', 'wait-for-service', 'riak_kv'])
+      args = ['docker', 'exec', i['Id'], 'riak-admin', 'wait-for-service', 'riak_kv']
+      #print "wait args: %s" % args
+      subprocess.check_call(args)
 
-@pytest.fixture(params=['basho/riak-ts', 'basho/riak-kv'])
+  """
+  Create a RiakClient connected to this cluster
+  """
+  def client(self):
+    return RiakClient(nodes=[RiakNode(host=ip) for ip in self.ips()])
+
+@pytest.fixture(params=['riak-ts'])
 def cluster(request):
 
   cluster = RiakCluster(request.param)

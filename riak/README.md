@@ -7,7 +7,7 @@ This image is built from a [`docker.mk`](https://github.com/jbrisbin/docker.mk) 
 
 ### Starting a Riak TS cluster
 
-You can start a simple Riak TS cluster using `docker-compose`. Create a working directory named `riak` and inside that directory create a file named `docker-compose.yml` based on the following example.
+You can start a simple Riak TS cluster using `docker-compose`. Create a working directory named `riak` and inside that directory create a file named `docker-compose.yml` based on the following example (examples for TS and KV exist in the directory in the files `riak-ts.yml` and `riak-kv.yml` respectively).
 
 Note: the `coordinator` node is the first one to be started in the cluster and is the node to which all the others will join. It's also the only container exposed on a predictable port.
 
@@ -25,6 +25,8 @@ services:
       - "com.basho.riak.cluster.name=${CLUSTER_NAME}"
     volumes:
       - schemas:/etc/riak/schemas
+    networks:
+      - riak
   member:
     image: basho/riak-ts
     ports:
@@ -34,6 +36,8 @@ services:
       - "com.basho.riak.cluster.name=${CLUSTER_NAME}"
     links:
       - coordinator
+    networks:
+      - riak
     depends_on:
       - coordinator
     environment:
@@ -41,11 +45,14 @@ services:
       - COORDINATOR_NODE=coordinator
 
 volumes:
-  schemas:
-    external: false
+  schemas: {}
+
+networks:
+  riak:
+    external: true
 ```
 
-If you bring up the cluster now, you'll get a 2-node cluster.
+If you bring up the cluster now, you'll get a 1-node cluster.
 
     $ export CLUSTER_NAME=test
     $ docker-compose up
@@ -60,7 +67,7 @@ You can scale the cluster to multiple nodes by using `docker-compose` and scalin
 
     $ docker-compose scale member=4
 
-The above will scale the cluster to 5 total nodes (1 coordinator + 4 members). If you refresh [the OPS page in Riak Explorer](http://localhost:8098/admin/#/cluster/default/ops) you should see the new nodes (they'll be using the Docker internal IPs which are 172.18.0.X).
+The above will scale the cluster to 5 total nodes (1 coordinator + 4 members). If you refresh [the OPS page in Riak Explorer](http://localhost:8098/admin/#/cluster/default/ops) you should see the new nodes (they'll be using the Docker internal IPs which are something like 172.22.0.X; it will vary depending on the docker network in use).
 
 ### Volumes for data
 

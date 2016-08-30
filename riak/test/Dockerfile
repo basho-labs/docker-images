@@ -1,9 +1,10 @@
-FROM basho/build-essential:ubuntu-14.04
+FROM alpine
 MAINTAINER Jon Brisbin <jbrisbin@basho.com>
 
-RUN pip install riak
+RUN apk add --no-cache py-pip docker bash curl
+RUN pip install --upgrade pip docker-compose pytest riak
 
-VOLUME /usr/src/test
+VOLUME /usr/src
 WORKDIR /usr/src/test
 
-ENTRYPOINT ["py.test", "-v", "--junit-xml=test-report.xml"]
+ENTRYPOINT ["pytest", "-v", "--junit-xml=test-report.xml"]

@@ -1,30 +1,38 @@
 version: "2"
 services:
   coordinator:
-    image: basho/riak-ts
+    image: basho/riak-kv
     ports:
-      - "8087:8087"
-      - "8098:8098"
+      - "8087"
+      - "8098"
     environment:
-      - CLUSTER_NAME=riakts
+      - CLUSTER_NAME=riakkv
     labels:
-      - "com.basho.riak.cluster.name=riakts"
+      - "com.basho.riak.cluster.name=riak-kv"
     volumes:
       - schemas:/etc/riak/schemas
+    networks:
+      - riak
   member:
-    image: basho/riak-ts
+    image: basho/riak-kv
     ports:
       - "8087"
       - "8098"
     labels:
-      - "com.basho.riak.cluster.name=riakts"
+      - "com.basho.riak.cluster.name=riak-kv"
     links:
       - coordinator
+    networks:
+      - riak
     depends_on:
       - coordinator
     environment:
-      - CLUSTER_NAME=riakts
+      - CLUSTER_NAME=riakkv
       - COORDINATOR_NODE=coordinator
 
 volumes:
   schemas: {}
+
+networks:
+  riak:
+    driver: bridge
