@@ -7,6 +7,7 @@ services:
       - "8098"
     environment:
       - CLUSTER_NAME=riakkv
+      - RIAK_MODE=${RIAK_MODE}
     labels:
       - "com.basho.riak.cluster.name=riak-kv"
     volumes:
@@ -27,6 +28,7 @@ services:
     environment:
       - CLUSTER_NAME=riakkv
       - COORDINATOR_NODE=coordinator
+      - RIAK_MODE=${RIAK_MODE}
 
 volumes:
   schemas: {}

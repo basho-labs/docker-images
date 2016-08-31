@@ -10,4 +10,3 @@ services:
       - "$PWD:/usr/src"
     network_mode: bridge
     working_dir: /usr/src/test
-    command: $PYTEST_ARGS
