@@ -25,8 +25,7 @@ services:
       - "com.basho.riak.cluster.name=${CLUSTER_NAME}"
     volumes:
       - schemas:/etc/riak/schemas
-    networks:
-      - riak
+    network_mode: bridge
   member:
     image: basho/riak-ts
     ports:
@@ -36,8 +35,7 @@ services:
       - "com.basho.riak.cluster.name=${CLUSTER_NAME}"
     links:
       - coordinator
-    networks:
-      - riak
+    network_mode: bridge
     depends_on:
       - coordinator
     environment:
@@ -46,10 +44,6 @@ services:
 
 volumes:
   schemas: {}
-
-networks:
-  riak:
-    external: true
 ```
 
 If you bring up the cluster now, you'll get a 1-node cluster.
