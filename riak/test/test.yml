@@ -1,0 +1,13 @@
+version: "2"
+services:
+  tests:
+    build: .
+    image: tests
+    privileged: true
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "$HOME/.sbt:/root/.sbt"
+      - "$HOME/.ivy2:/root/.ivy2"
+      - "..:/usr/src"
+    network_mode: bridge
+    working_dir: /usr/src/test

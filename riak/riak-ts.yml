@@ -11,8 +11,7 @@ services:
       - "com.basho.riak.cluster.name=riak-ts"
     volumes:
       - schemas:/etc/riak/schemas
-    networks:
-      - riak
+    network_mode: bridge
   member:
     image: basho/riak-ts
     ports:
@@ -22,8 +21,7 @@ services:
       - "com.basho.riak.cluster.name=riak-ts"
     links:
       - coordinator
-    networks:
-      - riak
+    network_mode: bridge
     depends_on:
       - coordinator
     environment:
@@ -32,7 +30,3 @@ services:
 
 volumes:
   schemas: {}
-
-networks:
-  riak:
-    external: true
