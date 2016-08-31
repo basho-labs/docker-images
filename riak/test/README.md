@@ -1,6 +1,6 @@
 # Riak Docker tests
 
-The `riak_docker` module contains a test fixture for working with a Dockerized Riak cluster.
+The `riak_docker` module contains a pytest test fixture for working with a Dockerized Riak cluster.
 
 #### Pre-requisites
 
@@ -20,11 +20,11 @@ To create a `RiakClient` using the Python client that is connected to the cluste
 
 ### Running the tests
 
-The tests are run inside a Docker container built from the `Dockerfile` residing in this directory. If you add tests to this folder that can be discovered by pytest, then running `make clean test` should pick them up and run them automatically.
+The tests are run inside a Docker container built from the `tests.Dockerfile` residing in this directory using the `docker.mk` utility. If you add tests to this folder that can be discovered by pytest, then running `make test` should pick them up and run them automatically.
 
 In order to pass additional parameters to `pytest` (like restricting what tests are run), declare the ENV variable `PYTEST_ARGS` with the appropriate parameters.
 
-    PYTEST_ARGS="-k my_test" make clean test
+    PYTEST_ARGS="-k my_test" make test
 
 ### Advanced config: networking
 

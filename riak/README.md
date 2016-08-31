@@ -1,15 +1,27 @@
-# Riak TS
+# Riak in Docker
 
 This image is built from a [`docker.mk`](https://github.com/jbrisbin/docker.mk) enabled repository:
 [https://github.com/basho-labs/docker-images/tree/master/riak](https://github.com/basho-labs/docker-images/tree/master/riak)
 
 [Riak TS](http://basho.com/products/riak-ts/) is a [timeseries](https://en.wikipedia.org/wiki/Time_series) database special-built for storage and analysis of timeseries data that is architected on the foundation of the Riak NoSQL database. It has been tailor-made to provide the same operational simplicity and flexibility of [Riak KV](https://github.com/basho/riak) but with special emphasis on dealing with time-based data.
 
-### Starting a Riak TS cluster
+### Building the image
 
-You can start a simple Riak TS cluster using `docker-compose`. Create a working directory named `riak` and inside that directory create a file named `docker-compose.yml` based on the following example (examples for TS and KV exist in the directory in the files `riak-ts.yml` and `riak-kv.yml` respectively).
+This build will create either a Riak TS or Riak KV image based on whether the `RIAK_FLAVOR` environment variable is set to `ts` or `kv`. `ts` is the default and will install the latest packages from [the Basho packagecloud repository](https://packagecloud.io/basho/).
 
-Note: the `coordinator` node is the first one to be started in the cluster and is the node to which all the others will join. It's also the only container exposed on a predictable port.
+To build the image, run `make`:
+
+    make install
+
+There are tests in the `test/` directory. They follow the `docker.mk` convention of declaring targets in makefiles named `*.mk` and prefixing the target with the string `test-*`. An example can be found in the [test/test.mk](test/test.mk) file. To run the tests, run `make` from the root directory:
+
+    make test
+
+### Starting a Riak cluster
+
+You can start a simple Riak cluster using `docker-compose`. Create a working directory named `riak` and inside that directory create a file named `docker-compose.yml` based on the following example (examples for TS and KV exist in the root directory in the files `riak-ts.yml` and `riak-kv.yml` respectively).
+
+_Note: the `coordinator` node is the first one to be started in the cluster and is the node to which all the others will join. It's also the only container exposed on a predictable port._
 
 ```yaml
 version: "2"
