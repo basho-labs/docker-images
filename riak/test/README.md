@@ -1,6 +1,6 @@
 # Riak Docker tests
 
-The `riak_docker` module contains a test fixture for working with a Dockerized Riak cluster. 
+The `riak_docker` module contains a test fixture for working with a Dockerized Riak cluster.
 
 #### Pre-requisites
 
@@ -28,4 +28,4 @@ In order to pass additional parameters to `pytest` (like restricting what tests 
 
 ### Advanced config: networking
 
-In order for the tests to talk to the cluster started by the test fixture, the container running the tests has to be using the same Docker network. In the default configuration, the `docker-compose` configuration and the `Makefile` specify a network name of `riak`.
+In order for the tests to talk to the cluster started by the test fixture, the container running the tests has to be using the same Docker network. In the default configuration, the `docker-compose` configuration and the `Makefile` specify a network name of `bridge`, which uses the default Docker networking bridge for both the container running the tests and the Riak cluster.
