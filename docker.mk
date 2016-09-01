@@ -37,7 +37,7 @@ endif
 # Test harness
 TESTS 							 ?= $(shell ls test/*.mk 2>/dev/null)
 
-.PHONY = all install distclean clean testclean test
+.PHONY: install distclean clean testclean test
 
 install:: $(DOCKERFILE)
 	docker build -t $(TAG) -f $(DOCKERFILE) $(DOCKER_BUILD_OPTS) .

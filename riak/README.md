@@ -98,3 +98,16 @@ Automatic loading of bucket types is supported in this image. It supports both T
 To use the schema bootstrapping with `docker-compose` you need to set up a volume named "schemas" that contains all the schema files. This volume will be mounted in the container at path `/etc/riak/schemas/`. The following will create a volume named `schemas` and copy the contents of `$(pwd)/schemas/*` to the volume. When `docker-compose up` is run, the sql and dt files will be translated into `riak-admin bucket type create` and activate commands based on the `basename` of the file.
 
     $ docker run --rm -it -v schemas:/etc/riak/schemas -v $(pwd)/schemas:/tmp/schemas alpine cp /tmp/schemas/* /etc/riak/schemas/
+
+### Adding pre and poststart hooks
+
+The Riak Docker container contains directories for pre and poststart hook scripts. They are:
+
+* `/etc/riak/prestart.d`
+* `/etc/riak/poststart.d`
+
+To add functionality to the container, either create a new image derived from this one which adds your hook scripts via `COPY` or mount a volume that follows a naming convention like this:
+
+    docker run -v $(pwd)/hooks/my-custom-poststart.sh:/etc/riak/poststart.d/10-my-custom-hook.sh basho/riak-ts
+
+This will mount your custom hook script in the `/etc/riak/poststart.d` directory where it will be sourced into the main boostrapping script after the Riak node has started and `wait-for-service` has returned, indicating the node is ready for use. Example scripts can be found in the [overlays/prestart.d](overlays/prestart.d) and [overlays/poststart.d](overlays/poststart.d) directories.
