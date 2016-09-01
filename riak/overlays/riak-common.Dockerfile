@@ -21,6 +21,9 @@ VOLUME /var/lib/riak
 # Install custom start script
 COPY {{$dir}}/riak-cluster.sh /usr/lib/riak/riak-cluster.sh
 RUN chmod a+x /usr/lib/riak/riak-cluster.sh
+# Install custom hooks
+COPY {{$dir}}/prestart.d /etc/riak/prestart.d
+COPY {{$dir}}/poststart.d /etc/riak/poststart.d
 
 # Prepare for bootstrapping schemas
 RUN mkdir -p /etc/riak/schemas
