@@ -98,3 +98,12 @@ Automatic loading of bucket types is supported in this image. It supports both T
 To use the schema bootstrapping with `docker-compose` you need to set up a volume named "schemas" that contains all the schema files. This volume will be mounted in the container at path `/etc/riak/schemas/`. The following will create a volume named `schemas` and copy the contents of `$(pwd)/schemas/*` to the volume. When `docker-compose up` is run, the sql and dt files will be translated into `riak-admin bucket type create` and activate commands based on the `basename` of the file.
 
     $ docker run --rm -it -v schemas:/etc/riak/schemas -v $(pwd)/schemas:/tmp/schemas alpine cp /tmp/schemas/* /etc/riak/schemas/
+
+### Riak Test
+#### Rapid Cluster Convergence
+When dockerized Riak is being used within unit and feature testing, rapid
+cluster convergence for quicker test cycles is important, so configuring
+transfers to have a larger share of CPU and Net I/O resources is ideal.
+Configuring Riak to have this characteristic is done within
+`overlays/riak-cluster.sh` on an opt-in basis. To opt-in to this behavior,
+set the environment variable `RIAK_MODE` to include `test`.
