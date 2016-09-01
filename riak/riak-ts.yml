@@ -7,7 +7,7 @@ services:
       - "8098"
     environment:
       - CLUSTER_NAME=riakts
-      - RIAK_MODE=${RIAK_MODE}
+      - CLUSTER_CONVERGENCE=${CLUSTER_CONVERGENCE}
     labels:
       - "com.basho.riak.cluster.name=riak-ts"
     volumes:
@@ -28,7 +28,7 @@ services:
     environment:
       - CLUSTER_NAME=riakts
       - COORDINATOR_NODE=coordinator
-      - RIAK_MODE=${RIAK_MODE}
+      - CLUSTER_CONVERGENCE=${CLUSTER_CONVERGENCE}
 
 volumes:
   schemas: {}

@@ -2,6 +2,7 @@
 
 export RIAK=/usr/sbin/riak
 export RIAK_CONF=/etc/riak/riak.conf
+export RIAK_ADVANCED_CONF=/etc/riak/advanced.config
 export RIAK_ADMIN=/usr/sbin/riak-admin
 export SCHEMAS_DIR=/etc/riak/schemas/
 

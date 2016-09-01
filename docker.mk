@@ -35,7 +35,7 @@ DOCKERMK_OPTS 			 += -cmd '$(CMD)'
 endif
 
 # Test harness
-TESTS 							 ?= $(shell ls test/*.mk 2>/dev/null)
+TESTS 							 ?= $(shell find test -name *.mk -print)
 
 .PHONY: install distclean clean testclean test
 
@@ -59,7 +59,7 @@ testclean::
 	done
 
 test:: $(DOCKERFILE)
-	@for t in "$(TESTS)"; do \
+	@for t in $(TESTS); do \
 		TEST_TARGETS=`egrep -o 'test-.*:' $$t | tr '\n' ' ' | tr -d :`; \
 		echo "TEST $$t: $$TEST_TARGETS"; \
 		$(MAKE) -C test -f `basename $$t` $$TEST_TARGETS; \
