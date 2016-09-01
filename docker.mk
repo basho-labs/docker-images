@@ -1,5 +1,7 @@
 WORKDIR 							= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 DOCKERMK 						 ?= $(WORKDIR)dockermk
+DOCKERMK_VERSION                    = 0.4.0
+DOCKERMK_VERSION_CURRENT            = $(awk 'BEGIN{FS="="}/DOCKERMK_VERSION/{print $2}' $(WORKDIR)/.dockermk)
 
 # Core options for docker.mk
 TAG                  ?= $(shell basename $(WORKDIR))
@@ -56,7 +58,7 @@ testclean::
 		$(MAKE) -C test -f `basename $$t` distclean; \
 	done
 
-test::
+test:: $(DOCKERFILE)
 	@for t in "$(TESTS)"; do \
 		TEST_TARGETS=`egrep -o 'test-.*:' $$t | tr '\n' ' ' | tr -d :`; \
 		echo "TEST $$t: $$TEST_TARGETS"; \
@@ -72,7 +74,13 @@ $(DOCKERFILE):: $(DOCKERMK) $(OVERLAY_FILES)
 	$(DOCKERMK_OPTS) \
 	$(OVERLAYS)
 
-$(DOCKERMK):
-	@echo "Downloading dockermk utility from GitHub..."
-	curl -sL -o $(DOCKERMK) https://github.com/jbrisbin/docker.mk/releases/download/0.4.0/dockermk-`uname -s`
-	@chmod a+x $(DOCKERMK)
+$(DOCKERMK): $(WORKDIR)/.dockermk
+ifneq (x$(DOCKERMK_VERSION_CURRENT),x$(DOCKERMK_VERSION))
+	echo "Downloading dockermk utility from GitHub..."
+	curl -sL -o $(DOCKERMK) https://github.com/jbrisbin/docker.mk/releases/download/$(DOCKERMK_VERSION)/dockermk-`uname -s`
+	chmod a+x $(DOCKERMK)
+	echo "DOCKERMK_VERSION=$(DOCKERMK_VERSION)" >$(WORKDIR)/.dockermk;
+endif
+
+$(WORKDIR)/.dockermk:
+	touch $(WORKDIR)/.dockermk
