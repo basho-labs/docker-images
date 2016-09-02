@@ -13,7 +13,7 @@ To build the image, run `make`:
 
     make install
 
-There are tests in the `test/` directory. They follow the `docker.mk` convention of declaring targets in makefiles named `*.mk` and prefixing the target with the string `test-*`. An example can be found in the [test/test.mk](test/test.mk) file. To run the tests, run `make` from the root directory:
+There are tests in the `test/` directory. They follow the `docker.mk` convention of declaring targets in makefiles named `*.mk` and prefixing the target with the string `test-*`. An example can be found in the [test/test.mk](test/test.mk) file. To run the tests, run `make test` from the root directory:
 
     make test
 
@@ -87,13 +87,13 @@ To discover the HOST:PORT values needed to connect to the Riak nodes running in 
 
 Set an environment variable to hold the HOST:PORT pairs.
 
-    $ export RIAK_HOSTS=$(echo $(docker inspect $(docker ps -q -f label=com.basho.riak.cluster.name=$CLUSTER_NAME) | jq -r '.[] | "localhost:" + .NetworkSettings.Ports."8087/tcp"[0].HostPort') | tr ' ' ',')
+    $ export RIAK_HOSTS=$(docker inspect -f '{{.NetworkSettings.IPAddress}}:8087' $(docker ps -q -f label=com.basho.riak.cluster.name=riak-ts) | tr '\\n' ',')
 
 Note: if you change the label `com.basho.riak.cluster.name` in the `docker-compose` configuration, you'll need to make sure the `docker ps` filter in the above command reflects this change.
 
 ### Bucket type bootstrapping
 
-Automatic loading of bucket types is supported in this image. It supports both TS buckets and KV data types by looking for files inside the `/etc/riak/schemas/` directory, which can be mounted as a volume. If a file ends with a `.sql` it's assumed to be a [SQL `CREATE TABLE` statement that creates a TS table](http://docs.basho.com/riak/ts/1.3.0/using/creating-activating/). If the file ends in `.dt` it's assumed to be a KV data type definition. The `basename` of the file (minus the `.sql` or `.dt` suffix) will be used as the bucket name.
+Automatic loading of bucket types is supported in this image. It supports both TS buckets and KV data types by looking for files inside the `/etc/riak/schemas/` directory, which can be mounted as a volume. If a file ends with a `.sql` it's assumed to be a [SQL `CREATE TABLE` statement that creates a TS table](http://docs.basho.com/riak/ts/1.4.0/using/creating-activating/). If the file ends in `.dt` it's assumed to be a KV data type definition. The `basename` of the file (minus the `.sql` or `.dt` suffix) will be used as the bucket name.
 
 To use the schema bootstrapping with `docker-compose` you need to set up a volume named "schemas" that contains all the schema files. This volume will be mounted in the container at path `/etc/riak/schemas/`. The following will create a volume named `schemas` and copy the contents of `$(pwd)/schemas/*` to the volume. When `docker-compose up` is run, the sql and dt files will be translated into `riak-admin bucket type create` and activate commands based on the `basename` of the file.
 
