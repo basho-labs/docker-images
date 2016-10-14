@@ -1,12 +1,13 @@
-FROM ubuntu:trusty
+FROM centos:7
 MAINTAINER Travis B. Hartwell <thartwell@contractor.basho.com>
-ENV \
-  DEBIAN_FRONTEND=noninteractive \
-  DEBCONF_NONINTERACTIVE_SEEN=true
-# Install essential software
-RUN apt-get update
-RUN apt-get dist-upgrade -y
-RUN apt-get install -y build-essential git curl
+
+# overlay: overlays/essential.Dockerfile 
+RUN yum install -y epel-release
+RUN yum -q -y update
+RUN yum -q -y upgrade
+RUN yum -q -y groupinstall "Development Tools"
+RUN yum -q -y install openssl openssl-devel git wget python-devel libffi-devel python-pip cyrus-sasl-devel cyrus-sasl-lib ca-certificates jq which
+# overlay: overlays/erlang.Dockerfile 
 ARG ERLANG_URL
 ENV ERLANG_HOME=/usr/lib/erlang
 
@@ -24,7 +25,8 @@ RUN update-alternatives \
   --slave /usr/bin/run_erl run_erl $ERLANG_HOME/bin/run_erl \
   --slave /usr/bin/to_erl to_erl $ERLANG_HOME/bin/to_erl \
   --slave /usr/bin/typer typer $ERLANG_HOME/bin/typer
+# overlay: overlays/basho-bench.Dockerfile 
 ARG BASHO_BENCH_BRANCH=master
 
 RUN git clone git://github.com/basho/basho_bench.git -b $BASHO_BENCH_BRANCH /opt/basho_bench
-RUN cd /opt/basho_bench && make all
+RUN cd /opt/basho_bench && make locked-deps && make all
