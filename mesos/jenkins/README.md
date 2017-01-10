@@ -1,8 +1,9 @@
+
 # Jenkins on Mesos
 
 Jenkins is deployed on Mesos using a Docker image deployed through Marathon. The image contains some basic configuration and an init script that produces a fully-functioning server, including connected build slaves, OOTB.
 
-### Building the image
+## Building the image
 
 First check out the source from GitHub so you can modify the base config to suit your deployment scenario:
 
@@ -31,7 +32,7 @@ JWiPlEoKa1Z3c
 
 Replace the string "4Dm3fH39Geavs" in the `Dockerfile` with the output from the `openssl passwd` command.
 
-#### Build
+### Build
 
 ```
 $ TAG=jenkins make clean install
@@ -51,13 +52,29 @@ Step 1 : FROM jenkinsci/jenkins:2.8
 ...
 ```
 
-### Deploying the image
+## Deploying the image
 
 The image is deployed to Mesos with Marathon. An example `marathon.json` file exists in the source repository.
 
 The main value to change in the `marathon.json` is the env var `JENKINS_CONFIG_REPO`, which should be set to an `org/repo` where the Jenkins configuration will be backed up. If using an existing repository, know that once the Jenkins server is running, you'll have to visit the configuration page and reload everything from SCM using the provided link.
 
-#### SSH keys
+
+### Running localy on marathon 127.0.0.1
+
+Run ```make deploy```
+
+### Running on remote marathon (other than 127.0.0.1)
+
+As soon as a jenkins installation with all required plugins can crash sometimes, and running on remote marathon leades to unpersistent jenkins home directory. To make the system tolerant to jenkins restart several tricks should apply.
+
+1 Edit ```marathon-remote.json.example``` to replace {{PERSISTENT_SLAVE_IP}} with IP of the mesos slave to use.
+2 Edit ```marathon-remote.json.example``` to replace {{PERSISTENT_SLAVE_PORT}} with port number you want to use to mke URL PERSISTENT.
+3 Connect with ssh to the slave you want to use for jenkins and create data only container ```jenkins-data``` with ```docker run -d -v /home/jenkins_home:/var/jenkins_home --name=jenkins-data --entrypoint=/bin/echo alpine "jenkins data-only container"```
+4 Edit ```marathon-remote.json.example``` to replace {{JENKINS_DATA_CONTAINER}} with jenkins-data
+5 Replace ```marathon.json``` with ```marathon-remote.json.example```
+
+
+### SSH keys
 
 Note that the provided JSON assumes that slaves have a user dedicated to Jenkins named `jenkins` and that a valid SSH key (that can access source repositories on GitHub) is contained in a `.tar.gz` file located in `/home/jenkins/` and named `ssh.tar.gz`. This file will be copied into the Jenkins server's `/var/jenkins_home` directory and will be used as the SSH key when syncing configuration and checking out source code.
 

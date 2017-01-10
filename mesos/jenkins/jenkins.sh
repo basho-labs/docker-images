@@ -25,16 +25,29 @@ copy_reference_file() {
 : ${JENKINS_HOME:="/var/jenkins_home"}
 export -f copy_reference_file
 touch "${COPY_REFERENCE_FILE_LOG}" || (echo "Can not write to ${COPY_REFERENCE_FILE_LOG}. Wrong volume permissions?" && exit 1)
-echo "--- Copying files at $(date)" >> "$COPY_REFERENCE_FILE_LOG"
-find /usr/share/jenkins/ref/ -type f -exec bash -c "copy_reference_file '{}'" \;
 
-sed -i "s#\${JENKINS_CONFIG_REPO}#$JENKINS_CONFIG_REPO#g" $JENKINS_HOME/scm-sync-configuration.xml
-cp -R $MESOS_SANDBOX/.ssh $JENKINS_HOME/.ssh
+if [ "x$USE_PERSISTENT_JENKINS_HOME" == "x" ]; then
+	rm -f $JENKINS_HOME/.USE_PERSISTENT_JENKINS_HOME
+	echo "--- Copying files at $(date)" >> "$COPY_REFERENCE_FILE_LOG"
+	find /usr/share/jenkins/ref/ -type f -exec bash -c "copy_reference_file '{}'" \;
+	sed -i "s#\${JENKINS_CONFIG_REPO}#$JENKINS_CONFIG_REPO#g" $JENKINS_HOME/scm-sync-configuration.xml
+	cp -R $MESOS_SANDBOX/.ssh $JENKINS_HOME/.ssh
+elif [ ! -f $JENKINS_HOME/.USE_PERSISTENT_JENKINS_HOME ]; then
+	echo "--- Copying files at $(date)" >> "$COPY_REFERENCE_FILE_LOG"
+	find /usr/share/jenkins/ref/ -type f -exec bash -c "copy_reference_file '{}'" \;
+	sed -i "s#\${JENKINS_CONFIG_REPO}#$JENKINS_CONFIG_REPO#g" $JENKINS_HOME/scm-sync-configuration.xml
+	cp -R $MESOS_SANDBOX/.ssh $JENKINS_HOME/.ssh
+	touch $JENKINS_HOME/.USE_PERSISTENT_JENKINS_HOME
+fi
+
+if [ [ ! -f $JENKINS_HOME/.gitconfig ] -a [ -f $JENKINS_HOME/gitconfig ] ]; then
+	mv -f $JENKINS_HOME/gitconfig $JENKINS_HOME/.gitconfig
+fi
 
 # if `docker run` first argument start with `--` the user is passing jenkins launcher arguments
 if [[ $# -lt 1 ]] || [[ "$1" == "--"* ]]; then
   eval "exec java $JAVA_OPTS -jar /usr/share/jenkins/jenkins.war $JENKINS_OPTS \"\$@\""
-fi
-
+else
 # As argument is not jenkins, assume user want to run his own process, for sample a `bash` shell to explore this image
-exec "$@"
+  exec "$@"
+fi
