@@ -1,7 +1,7 @@
 #!/bin/bash
 curl -sSL -XPOST -H "Content-Type: application/json" -d @- "http://marathon.mesos:8080/v2/apps" <<END
 {
-  "id": "/jenkins/build/$3",
+  "id": "/jenkins/slaves/$3",
   "cpus": 1,
   "mem": 8192,
   "instances": 1,

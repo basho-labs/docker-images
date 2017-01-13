@@ -1,0 +1,88 @@
+{
+  "id": "/jenkins/master",
+  "cmd": null,
+  "cpus": 2,
+  "mem": 4096,
+  "disk": 0,
+  "instances": 1,
+  "constraints": [
+    [
+      "hostname",
+      "CLUSTER",
+      "{{PERSISTENT_SLAVE_IP}}"
+    ]
+  ],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [
+      {
+        "containerPath": "/var/run/docker.sock",
+        "hostPath": "/var/run/docker.sock",
+        "mode": "RW"
+      }
+    ],
+    "docker": {
+      "image": "jenkins-mesos-local",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": {{PERSISTENT_SLAVE_PORT}},
+          "servicePort": 10002,
+          "protocol": "tcp",
+          "labels": {}
+        },
+        {
+          "containerPort": 0,
+          "hostPort": 0,
+          "servicePort": 10003,
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ],
+      "privileged": true,
+      "parameters": [],
+      "forcePullImage": false,
+      "parameters": [
+                { "key": "volumes-from", "value": "{{JENKINS_DATA_CONTAINER}}" }
+            ]
+    }
+  },
+  "env": {
+    "JENKINS_CONFIG_REPO": "jbrisbin/jenkins-mesos-softlayer",
+    "JENKINS_OPTS": "--prefix=/jenkins",
+    "USE_PERSISTENT_JENKINS_HOME": "yes"
+  },
+  "healthChecks": [
+    {
+      "path": "/jenkins/",
+      "protocol": "HTTP",
+      "portIndex": 0,
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 300,
+      "timeoutSeconds": 300,
+      "maxConsecutiveFailures": 25,
+      "ignoreHttp1xx": false
+    }
+  ],
+  "portDefinitions": [
+    {
+      "port": 10002,
+      "protocol": "tcp",
+      "labels": {}
+    },
+    {
+      "port": 10003,
+      "protocol": "tcp",
+      "labels": {}
+    }
+  ],
+  "fetch": [
+    {
+      "uri": "file:///home/jenkins/ssh.tar.gz",
+      "extract": true,
+      "executable": false,
+      "cache": false
+    }
+  ]
+}
